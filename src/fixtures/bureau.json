@@ -1,0 +1,22 @@
+[
+  {
+    "pk": 1,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Hradčany",
+      "abbrev": "HRAD",
+      "number": 3,
+      "address": "Pohořelec 111/25, Praha 1"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ostrčilovo náměstí",
+      "abbrev": "OSTRC",
+      "number": 18,
+      "address": "Ostrčilovo nám. 518/1, Praha 2"
+    }
+  }
+]
