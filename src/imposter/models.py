@@ -97,8 +97,8 @@ class PosterSpec(TimeStampedModel):
 
 class Poster(TimeStampedModel):
 
-    bureau = models.ForeignKey(Bureau, related_name='posters')
-    spec = models.ForeignKey(PosterSpec, related_name='posters')
+    bureau = models.ForeignKey(Bureau, models.CASCADE, related_name='posters')
+    spec = models.ForeignKey(PosterSpec, models.CASCADE, related_name='posters')
     saved_fields = JSONField(editable=False)  # Fields from spec with saved values
 
     def _upload_to(self, filename):
@@ -197,10 +197,10 @@ class Image(TimeStampedModel):
 class SpecImage(Image):
 
     BASE_PATH = 'specs/images'
-    spec = models.ForeignKey(PosterSpec, related_name='images')
+    spec = models.ForeignKey(PosterSpec, models.CASCADE, related_name='images')
 
 
 class PosterImage(Image):
 
     BASE_PATH = 'posters/images'
-    poster = models.ForeignKey(Poster, related_name='images')
+    poster = models.ForeignKey(Poster, models.CASCADE, related_name='images')
