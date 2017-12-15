@@ -1,7 +1,9 @@
 from rest_framework import viewsets, permissions
 
-from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterUpdateSerializer
-from imposter.models import Bureau, PosterSpec, Poster, PosterImage
+from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterCreateUpdateSerializer
+from imposter.models.bureau import Bureau
+from imposter.models.poster import Poster
+from imposter.models.posterspec import PosterSpec
 
 
 class BureauViewSet(viewsets.ReadOnlyModelViewSet):
@@ -48,4 +50,4 @@ class PosterViewSet(viewsets.ModelViewSet):
         if self.request.method in permissions.SAFE_METHODS:
             return PosterSerializer
 
-        return PosterUpdateSerializer
+        return PosterCreateUpdateSerializer
