@@ -163,7 +163,8 @@
     },
     "partner_logos": {
       "type": "image",
-      "name": "Loga partnerů"
+      "name": "Loga partnerů",
+      "fields": {}
     }
   }
 }

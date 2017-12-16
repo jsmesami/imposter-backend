@@ -1,14 +1,9 @@
-from copy import deepcopy
-from functools import reduce
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
-from imposter.models.image import PosterImage
-from utils.functional import deepmerge
 
 
 class BureauSerializer(serializers.ModelSerializer):
@@ -26,6 +21,7 @@ class SpecListSerializer(serializers.ModelSerializer):
 
 
 class SpecSerializer(serializers.ModelSerializer):
+
     thumb = serializers.SerializerMethodField()
 
     def get_thumb(self, instance):
@@ -41,9 +37,13 @@ class PosterSerializer(serializers.ModelSerializer):
     bureau = BureauSerializer(read_only=True)
     spec = SpecListSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
+    print = serializers.SerializerMethodField()
 
     def get_thumb(self, instance):
         return instance.thumb.url
+
+    def get_print(self, instance):
+        return instance.print.url
 
     class Meta:
         model = Poster
@@ -79,7 +79,6 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             ))
 
     def validate_fields(self, fields):
-
         if self.instance:
             saved_fields = self.instance.saved_fields
             spec_object = self.instance.spec
@@ -122,26 +121,6 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         validate_specs(fields)
 
         return fields
-
-    def create(self, validated_data):
-        stripped_data = deepcopy(validated_data)
-        stripped_data['saved_fields'] = {}
-        instance = super().create(stripped_data)
-        return self.update(instance, validated_data)
-
-    def update(self, instance, validated_data):
-        populated_fields = reduce(deepmerge, [validated_data.get('saved_fields', {}),
-                                              instance.saved_fields,
-                                              instance.spec.editable_fields])
-
-        transformed_fields = PosterImage.save_images_from_fields(populated_fields, poster=instance)
-
-        instance.bureau = validated_data.get('bureau', instance.bureau)
-        instance.spec = validated_data.get('spec', instance.spec)
-        instance.saved_fields = transformed_fields
-
-        instance.save()
-        return instance
 
     class Meta:
         model = Poster

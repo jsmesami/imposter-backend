@@ -11,8 +11,6 @@ from django.utils.text import slugify
 from utils.functional import deepmerge
 from utils.models import TimeStampedModel
 
-from imposter.models.poster import Poster, PosterSpec
-
 
 class Image(TimeStampedModel):
 
@@ -31,6 +29,9 @@ class Image(TimeStampedModel):
 
     @staticmethod
     def normalize_data(image_data):
+        if image_data is None:
+            return None
+
         if not isinstance(image_data, str):
             raise ValueError('Image data must be string.')
 
@@ -40,14 +41,11 @@ class Image(TimeStampedModel):
         return image_data
 
     @classmethod
-    def from_data(cls, image_data, filename, **kwargs):
-        return cls(
-            file=ContentFile(base64.b64decode(image_data), name=filename),
-            **kwargs
-        )
+    def from_data(cls, image_data, filename):
+        return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
 
     @classmethod
-    def _from_field(cls, field_values, **kwargs):
+    def _from_field(cls, field_values):
         existing_image_id = field_values.get('id')
         new_image_data = cls.normalize_data(field_values.get('data'))
 
@@ -61,30 +59,32 @@ class Image(TimeStampedModel):
             except cls.DoesNotExist:
                 pass
 
-        image = cls.from_data(new_image_data, field_values.get('filename'), **kwargs)
+        image = cls.from_data(new_image_data, field_values.get('filename'))
         image.save()
 
         return image
 
     @classmethod
-    def save_images_from_fields(cls, fields, **kwargs):
+    def save_images_from_fields(cls, fields):
         """Given fields, save Image objects and return fields with transformed image data."""
 
-        def transform(source_fields):
+        def transform_image_fields(source_fields):
             transformed_fields = defaultdict(dict)
             for field_name, field_values in source_fields.items():
                 children = field_values.get('fields')
                 if children:
-                    transformed_fields[field_name]['fields'] = transform(children)
+                    transformed_fields[field_name]['fields'] = transform_image_fields(children)
                 else:
-                    image = cls._from_field(field_values, **kwargs)
+                    image = cls._from_field(field_values)
                     transformed_fields[field_name]['data'] = None
                     transformed_fields[field_name]['id'] = image.pk
                     transformed_fields[field_name]['filename'] = None
                     transformed_fields[field_name]['url'] = image.file.url
             return transformed_fields
 
-        return deepmerge(transform(PosterSpec.get_image_fields(fields)), fields)
+        from imposter.models.posterspec import PosterSpec
+
+        return deepmerge(transform_image_fields(PosterSpec.get_image_fields(fields)), fields)
 
     class Meta:
         abstract = True
@@ -93,10 +93,8 @@ class Image(TimeStampedModel):
 class SpecImage(Image):
 
     BASE_PATH = 'specs/images'
-    spec = models.ForeignKey(PosterSpec, on_delete=models.CASCADE, related_name='images')
 
 
 class PosterImage(Image):
 
     BASE_PATH = 'posters/images'
-    poster = models.ForeignKey(Poster, on_delete=models.CASCADE, related_name='images')

@@ -1,9 +1,14 @@
+import base64
+
 from collections import OrderedDict
 
 from django.contrib.postgres.fields.jsonb import JSONField
+from django.core.files.base import ContentFile
 from django.db import models
+from django.utils.text import slugify
 
 from imposter.models import EnabledQuerySet
+from utils.functional import deepmerge
 from utils.models import TimeStampedModel
 
 
@@ -71,3 +76,17 @@ class PosterSpec(TimeStampedModel):
     @property
     def editable_fields(self):
         return self.get_editable_fields(self.fields)
+
+    def save(self, **kwargs):
+        from imposter.models.image import SpecImage
+
+        thumb_data = SpecImage.normalize_data(str(self.thumb))
+        thumb_name = slugify(self.name)+'-thumb.jpg'
+        self.thumb = ContentFile(base64.b64decode(thumb_data), name=thumb_name)
+
+        self.fields = deepmerge(
+            SpecImage.save_images_from_fields(self.get_static_fields(self.fields)),
+            self.fields,
+        )
+
+        super().save(**kwargs)

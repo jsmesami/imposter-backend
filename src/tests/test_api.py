@@ -1,4 +1,3 @@
-import json
 import os
 
 import factory
@@ -11,7 +10,6 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from imposter.models.poster import Poster
-from imposter.models.image import PosterImage
 
 
 CREATE_POSTER_FIELDS = {
@@ -50,23 +48,13 @@ CREATE_POSTER_FIELDS = {
 
 
 class PosterFactory(factory.DjangoModelFactory):
+
     class Meta:
         model = Poster
 
     spec_id = 1
     bureau_id = 1
-    saved_fields = {}
-
-    @classmethod
-    def _create(cls, model_class, *args, **kwargs):
-        instance = super()._create(
-            model_class=model_class,
-            *args,
-            **kwargs,
-        )
-        instance.saved_fields = PosterImage.save_images_from_fields(CREATE_POSTER_FIELDS, poster=instance)
-        instance.save()
-        return instance
+    saved_fields = CREATE_POSTER_FIELDS
 
 
 class TestApi(APITestCase):
@@ -92,4 +80,3 @@ class TestApi(APITestCase):
     def test_poster_read(self):
         response = self.client.get(reverse('poster-detail', args=[self.poster.pk]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(json.dumps(response.data, indent=2))

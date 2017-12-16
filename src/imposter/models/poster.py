@@ -4,7 +4,9 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.db import models
 
 from imposter.models.bureau import Bureau
+from imposter.models.image import PosterImage
 from imposter.models.posterspec import PosterSpec
+from utils.functional import deepmerge
 from utils.models import TimeStampedModel
 
 
@@ -40,7 +42,7 @@ class Poster(TimeStampedModel):
     @property
     def title(self):
         return (self.saved_fields.get('title', {}).get('text') or
-                "Plakát {self.id} ({self.spec.name})".format(self=self))
+                "Poster {self.id} ({self.spec.name})".format(self=self))
 
     def generate_print(self):
         return "TODO"
@@ -51,4 +53,7 @@ class Poster(TimeStampedModel):
     def save(self, **kwargs):
         self.print = self.generate_print()
         self.thumb = self.generate_thumb()
+
+        self.saved_fields = PosterImage.save_images_from_fields(deepmerge(self.saved_fields, self.spec.editable_fields))
+
         super().save(**kwargs)
