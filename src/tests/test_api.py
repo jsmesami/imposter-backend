@@ -67,14 +67,14 @@ class TestApi(APITestCase):
         call_command('load_specs')
         cls.poster = PosterFactory()
 
-    @staticmethod
-    def get_image_ids(fields):
-        return filter(None, [i.get('id') for i in walk_fields(fields)])
-
-    def assert_images_count(self, fields):
-        image_ids = list(self.get_image_ids(fields))
+    def check_images_count(self, fields):
+        image_ids = list(filter(None, [i.get('id') for i in walk_fields(fields)]))
         images = PosterImage.objects.filter(id__in=image_ids)
         self.assertEqual(len(image_ids), images.count())
+
+    def check_texts(self, fields):
+        for field, value in CREATE_POSTER_FIELDS.items():
+            self.assertEqual(fields[field].get('text'), value.get('text'))
 
     def test_spec(self):
         response = self.client.get(reverse('posterspec-list'))
@@ -86,10 +86,14 @@ class TestApi(APITestCase):
             spec=1,
             fields=CREATE_POSTER_FIELDS,
         ))
+        fields = dict(response.data)['fields']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assert_images_count(dict(response.data)['fields'])
+        self.check_images_count(fields)
+        self.check_texts(fields)
 
     def test_poster_read(self):
         response = self.client.get(reverse('poster-detail', args=[self.poster.pk]))
+        fields = dict(response.data)['fields']
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assert_images_count(dict(response.data)['fields'])
+        self.check_images_count(fields)
+        self.check_texts(fields)
