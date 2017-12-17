@@ -38,6 +38,7 @@ class PosterSerializer(serializers.ModelSerializer):
     spec = SpecListSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
     print = serializers.SerializerMethodField()
+    fields = serializers.JSONField(source='saved_fields')
 
     def get_thumb(self, instance):
         return instance.thumb.url
@@ -47,7 +48,7 @@ class PosterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poster
-        fields = 'id editable title thumb print bureau spec saved_fields'.split()
+        fields = 'id editable title thumb print bureau spec fields'.split()
 
 
 class PosterCreateUpdateSerializer(serializers.ModelSerializer):

@@ -57,3 +57,11 @@ class Poster(TimeStampedModel):
         self.saved_fields = PosterImage.save_images_from_fields(deepmerge(self.saved_fields, self.spec.editable_fields))
 
         super().save(**kwargs)
+
+
+def walk_fields(fields):
+    for field, value in fields.items():
+        if 'fields' in value:
+            yield from walk_fields(value['fields'])
+        else:
+            yield value
