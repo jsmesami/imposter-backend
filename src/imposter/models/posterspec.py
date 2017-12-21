@@ -26,7 +26,7 @@ class PosterSpec(TimeStampedModel):
 
     objects = models.Manager.from_queryset(EnabledQuerySet)()
 
-    FIELD_SPECS = {
+    FIELD_PARAMS = {
         'text': {
             'editable': {'text', 'fields'},
             'mandatory': {'text'},

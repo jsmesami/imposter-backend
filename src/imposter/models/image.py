@@ -41,7 +41,7 @@ class Image(TimeStampedModel):
         return image_data
 
     @classmethod
-    def from_data(cls, image_data, filename):
+    def _from_data(cls, image_data, filename):
         return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
 
     @classmethod
@@ -59,7 +59,7 @@ class Image(TimeStampedModel):
             except cls.DoesNotExist:
                 pass
 
-        image = cls.from_data(new_image_data, field_values.get('filename'))
+        image = cls._from_data(new_image_data, field_values.get('filename'))
         image.save()
 
         return image

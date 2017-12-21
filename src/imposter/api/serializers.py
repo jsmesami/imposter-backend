@@ -58,28 +58,28 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField(source='saved_fields')
 
     @staticmethod
-    def specs_validator(field_type, field_name, field_values, saved_field_values):
-        assert field_type in PosterSpec.FIELD_SPECS.keys()
+    def field_params_validator(field_type, field_name, field_params, saved_field_params):
+        assert field_type in PosterSpec.FIELD_PARAMS.keys()
 
-        editable_values = PosterSpec.FIELD_SPECS[field_type]['editable']
-        disallowed_specs = set(field_values.keys()) - editable_values
-        if disallowed_specs:
-            raise ValidationError("Specs not allowed for {type} field '{name}': {specs}".format(
+        editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
+        disallowed_params = set(field_params.keys()) - editable_params
+        if disallowed_params:
+            raise ValidationError("Parameters not allowed for {type} field '{name}': {specs}".format(
                 type=field_type,
                 name=field_name,
-                specs=', '.join(disallowed_specs),
+                specs=', '.join(disallowed_params),
             ))
 
-        mandatory_specs = PosterSpec.FIELD_SPECS[field_type]['mandatory']
-        missing_required_specs = mandatory_specs - set(saved_field_values.keys()) - set(field_values.keys())
-        if missing_required_specs:
-            raise ValidationError("Missing required specs for {type} field '{name}': {specs}".format(
+        mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
+        missing_required_params = mandatory_params - set(saved_field_params.keys()) - set(field_params.keys())
+        if missing_required_params:
+            raise ValidationError("Missing required parameters for {type} field '{name}': {specs}".format(
                 type=field_type,
                 name=field_name,
-                specs=', '.join(missing_required_specs),
+                specs=', '.join(missing_required_params),
             ))
 
-    def validate_fields(self, fields):
+    def validate_fields(self, new_fields):
         if self.instance:
             saved_fields = self.instance.saved_fields
             spec_object = self.instance.spec
@@ -89,11 +89,11 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             try:
                 spec_object = PosterSpec.objects.get(pk=spec_id)
             except PosterSpec.DoesNotExist:
-                raise ValidationError('Cannot retreive poster specification of ID {}.'.format(spec_id))
+                raise ValidationError('Cannot retreive poster specification with ID {}.'.format(spec_id))
 
-        # Do not allow passing fields that are not in spec
+        # Do not allow fields that are not in spec
         disallowed_fields = (
-            set(fields.keys()) -
+            set(new_fields.keys()) -
             set(spec_object.editable_fields.keys())
         )
         if disallowed_fields:
@@ -103,25 +103,25 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         missing_required_fields = (
             set(spec_object.mandatory_fields.keys()) -
             set(saved_fields.keys()) -
-            set(fields.keys())
+            set(new_fields.keys())
         )
         if missing_required_fields:
             raise ValidationError('Missing required fields: ' + ', '.join(missing_required_fields))
 
-        # Recursively check if fields have valid specs
-        def validate_specs(fields, parent_type=None):
-            for field_name, field_values in fields.items():
+        # Recursively check if fields have valid parameters
+        def validate_params(fields, parent_type=None):
+            for field_name, field_params in fields.items():
                 field_type = spec_object.fields.get(field_name, {}).get('type')
-                children = field_values.get('fields')
+                children = field_params.get('fields')
                 if children:
-                    validate_specs(children, field_type)
+                    validate_params(children, field_type)
                 else:
-                    saved_field_values = saved_fields.get(field_name, {})
-                    self.specs_validator(parent_type or field_type, field_name, field_values, saved_field_values)
+                    saved_field_params = saved_fields.get(field_name, {})
+                    self.field_params_validator(parent_type or field_type, field_name, field_params, saved_field_params)
 
-        validate_specs(fields)
+        validate_params(new_fields)
 
-        return fields
+        return new_fields
 
     class Meta:
         model = Poster
