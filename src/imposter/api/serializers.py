@@ -4,6 +4,7 @@ from rest_framework.exceptions import ValidationError
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
+from utils.functional import deepmerge
 
 
 class BureauSerializer(serializers.ModelSerializer):
@@ -58,33 +59,33 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField(source='saved_fields')
 
     @staticmethod
-    def field_params_validator(field_type, field_name, field_params, saved_field_params):
+    def field_params_validator(field_type, field_name, field_params):
         assert field_type in PosterSpec.FIELD_PARAMS.keys()
 
         editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
         disallowed_params = set(field_params.keys()) - editable_params
         if disallowed_params:
-            raise ValidationError("Parameters not allowed for {type} field '{name}': {specs}".format(
+            raise ValidationError("Parameters not allowed for {type} field '{name}': {params}".format(
                 type=field_type,
                 name=field_name,
-                specs=', '.join(disallowed_params),
+                params=', '.join(disallowed_params),
             ))
 
         mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
-        missing_required_params = mandatory_params - set(saved_field_params.keys()) - set(field_params.keys())
+        missing_required_params = mandatory_params - set(field_params.keys())
         if missing_required_params:
-            raise ValidationError("Missing required parameters for {type} field '{name}': {specs}".format(
+            raise ValidationError("Missing required parameters for {type} field '{name}': {params}".format(
                 type=field_type,
                 name=field_name,
-                specs=', '.join(missing_required_params),
+                params=', '.join(missing_required_params),
             ))
 
     def validate_fields(self, new_fields):
         if self.instance:
-            saved_fields = self.instance.saved_fields
+            merged_fields = deepmerge(new_fields, self.instance.saved_fields)
             spec_object = self.instance.spec
         else:
-            saved_fields = {}
+            merged_fields = new_fields
             spec_id = self.initial_data.get('spec')
             try:
                 spec_object = PosterSpec.objects.get(pk=spec_id)
@@ -93,7 +94,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
         # Do not allow fields that are not in spec
         disallowed_fields = (
-            set(new_fields.keys()) -
+            set(merged_fields.keys()) -
             set(spec_object.editable_fields.keys())
         )
         if disallowed_fields:
@@ -102,13 +103,12 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         # Check if all required fields are present
         missing_required_fields = (
             set(spec_object.mandatory_fields.keys()) -
-            set(saved_fields.keys()) -
-            set(new_fields.keys())
+            set(merged_fields.keys())
         )
         if missing_required_fields:
             raise ValidationError('Missing required fields: ' + ', '.join(missing_required_fields))
 
-        # Recursively check if fields have valid parameters
+        # Recursively check if new fields have valid parameters
         def validate_params(fields, parent_type=None):
             for field_name, field_params in fields.items():
                 field_type = spec_object.fields.get(field_name, {}).get('type')
@@ -116,12 +116,11 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 if children:
                     validate_params(children, field_type)
                 else:
-                    saved_field_params = saved_fields.get(field_name, {})
-                    self.field_params_validator(parent_type or field_type, field_name, field_params, saved_field_params)
+                    self.field_params_validator(parent_type or field_type, field_name, field_params)
 
         validate_params(new_fields)
 
-        return new_fields
+        return merged_fields
 
     class Meta:
         model = Poster

@@ -1,5 +1,3 @@
-import json
-
 import os
 
 import factory
@@ -48,6 +46,12 @@ CREATE_POSTER_FIELDS = {
     }
 }
 
+UPDATE_POSTER_FIELDS = {
+    'summary': {
+        'text': 'updated',
+    },
+}
+
 
 class PosterFactory(factory.DjangoModelFactory):
 
@@ -86,14 +90,25 @@ class TestApi(APITestCase):
             spec=1,
             fields=CREATE_POSTER_FIELDS,
         ))
-        fields = dict(response.data)['fields']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        fields = dict(response.data)['fields']
         self.check_images_count(fields)
         self.check_texts(fields)
 
     def test_poster_read(self):
         response = self.client.get(reverse('poster-detail', args=[self.poster.pk]))
-        fields = dict(response.data)['fields']
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        fields = dict(response.data)['fields']
         self.check_images_count(fields)
         self.check_texts(fields)
+
+    def test_poster_update(self):
+        response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(
+            fields=UPDATE_POSTER_FIELDS,
+        ))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        fields = dict(response.data)['fields']
+        self.assertEqual(fields['summary']['text'], UPDATE_POSTER_FIELDS['summary']['text'])
