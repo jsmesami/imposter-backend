@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 
 import factory
@@ -16,23 +17,23 @@ from utils.functional import deepmerge
 
 CREATE_POSTER_FIELDS = {
     'title': {
-        'text': 'title'
+        'text': 'title',
     },
     'main_image':  {
         'filename': 'main.gif',
         'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
     },
     'event_price': {
-        'text': 'price'
+        'text': 'price',
     },
     'event_date': {
-        'text': 'date'
+        'text': 'date',
     },
     'summary': {
-        'text': 'summary'
+        'text': 'summary',
     },
     'bureau_address': {
-        'text': 'address'
+        'text': 'address',
     },
     'partner_logos': {
         'fields': {
@@ -43,9 +44,9 @@ CREATE_POSTER_FIELDS = {
             'logo2': {
                 'filename': 'logo2.gif',
                 'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
-            }
-        }
-    }
+            },
+        },
+    },
 }
 
 UPDATE_POSTER_FIELDS = {
@@ -57,9 +58,9 @@ UPDATE_POSTER_FIELDS = {
             'logo1': {
                 'filename': 'logo3.gif',
                 'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
-            }
-        }
-    }
+            },
+        },
+    },
 }
 
 
@@ -86,7 +87,7 @@ class TestApi(APITestCase):
         images = PosterImage.objects.filter(id__in=image_ids)
         self.assertEqual(len(image_ids), images.count())
 
-    def check_texts(self, in_fields, out_fields):
+    def check_texts_equality(self, in_fields, out_fields):
         def get_texts(f):
             return sorted(filter(None, [i.get('text') for i in walk_fields(f)]))
 
@@ -96,32 +97,69 @@ class TestApi(APITestCase):
         response = self.client.get(reverse('posterspec-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_poster_create(self):
-        response = self.client.post(reverse('poster-list'), data=dict(
-            bureau=1,
-            spec=1,
-            fields=CREATE_POSTER_FIELDS,
-        ))
+    def create_poster(self, fields):
+        return self.client.post(reverse('poster-list'), data=dict(bureau=1, spec=1, fields=fields))
+
+    def read_poster(self, pk):
+        return self.client.get(reverse('poster-detail', args=[pk]))
+
+    def update_poster(self, pk, fields):
+        return self.client.patch(reverse('poster-detail', args=[pk]), data=dict(fields=fields))
+
+    def test_poster_create_success(self):
+        response = self.create_poster(CREATE_POSTER_FIELDS)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        fields = dict(response.data)['fields']
+        fields = response.data['fields']
         self.check_images_count(fields)
-        self.check_texts(CREATE_POSTER_FIELDS, fields)
+        self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
 
-    def test_poster_read(self):
-        response = self.client.get(reverse('poster-detail', args=[self.poster.pk]))
+    def test_poster_create_fails_with_disallowed_fields(self):
+        disallowed_fields = {
+            'a': {},
+            'b': {},
+        }
+        response = self.create_poster(deepmerge(disallowed_fields, deepcopy(CREATE_POSTER_FIELDS)))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ['Fields not allowed: a, b'])
+
+    def test_poster_create_fails_with_missing_required_fields(self):
+        fields = deepcopy(CREATE_POSTER_FIELDS)
+        del fields['title']
+        response = self.create_poster(fields)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ['Missing required fields: title'])
+
+    def test_poster_create_fails_with_disallowed_field_parameters(self):
+        disallowed_field_params = {
+            'title': {
+                'c': '',
+                'd': '',
+            }
+        }
+        response = self.create_poster(deepmerge(disallowed_field_params, deepcopy(CREATE_POSTER_FIELDS)))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ["Parameters not allowed for text field 'title': c, d"])
+
+    def test_poster_create_fails_with_missing_required_parameters(self):
+        fields = deepcopy(CREATE_POSTER_FIELDS)
+        del fields['title']['text']
+        response = self.create_poster(fields)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ["Missing required parameters for text field 'title': text"])
+
+    def test_poster_read_success(self):
+        response = self.read_poster(self.poster.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        fields = dict(response.data)['fields']
+        fields = response.data['fields']
         self.check_images_count(fields)
-        self.check_texts(CREATE_POSTER_FIELDS, fields)
+        self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
 
-    def test_poster_update(self):
-        response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(
-            fields=UPDATE_POSTER_FIELDS,
-        ))
+    def test_poster_update_success(self):
+        response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        fields = dict(response.data)['fields']
+        fields = response.data['fields']
         self.check_images_count(fields)
-        self.check_texts(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
+        self.check_texts_equality(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)

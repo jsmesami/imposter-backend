@@ -63,7 +63,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         assert field_type in PosterSpec.FIELD_PARAMS.keys()
 
         editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
-        disallowed_params = set(field_params.keys()) - editable_params
+        disallowed_params = sorted(set(field_params.keys()) - editable_params)
         if disallowed_params:
             raise ValidationError("Parameters not allowed for {type} field '{name}': {params}".format(
                 type=field_type,
@@ -72,12 +72,12 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             ))
 
         mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
-        missing_required_params = mandatory_params - set(field_params.keys())
+        missing_required_params = sorted(mandatory_params - set(field_params.keys()))
         if missing_required_params:
             raise ValidationError("Missing required parameters for {type} field '{name}': {params}".format(
                 type=field_type,
                 name=field_name,
-                params=', '.join(missing_required_params),
+                params=', '.join(sorted(missing_required_params)),
             ))
 
     def validate_fields(self, new_fields):
@@ -93,7 +93,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 raise ValidationError('Cannot retreive poster specification with ID {}.'.format(spec_id))
 
         # Do not allow fields that are not in spec
-        disallowed_fields = (
+        disallowed_fields = sorted(
             set(merged_fields.keys()) -
             set(spec_object.editable_fields.keys())
         )
@@ -101,7 +101,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             raise ValidationError('Fields not allowed: ' + ', '.join(disallowed_fields))
 
         # Check if all required fields are present
-        missing_required_fields = (
+        missing_required_fields = sorted(
             set(spec_object.mandatory_fields.keys()) -
             set(merged_fields.keys())
         )
