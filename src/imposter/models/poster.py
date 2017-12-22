@@ -60,8 +60,8 @@ class Poster(TimeStampedModel):
 
 
 def walk_fields(fields):
-    for field, value in fields.items():
-        if 'fields' in value:
-            yield from walk_fields(value['fields'])
+    for field, values in fields.items():
+        if 'fields' in values:
+            yield from walk_fields(values['fields'])
         else:
-            yield value
+            yield values

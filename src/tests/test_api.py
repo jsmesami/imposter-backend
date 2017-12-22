@@ -11,6 +11,8 @@ from rest_framework.test import APITestCase
 
 from imposter.models.image import PosterImage
 from imposter.models.poster import Poster, walk_fields
+from utils.functional import deepmerge
+
 
 CREATE_POSTER_FIELDS = {
     'title': {
@@ -50,6 +52,14 @@ UPDATE_POSTER_FIELDS = {
     'summary': {
         'text': 'updated',
     },
+    'partner_logos': {
+        'fields': {
+            'logo1': {
+                'filename': 'logo3.gif',
+                'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
+            }
+        }
+    }
 }
 
 
@@ -76,9 +86,11 @@ class TestApi(APITestCase):
         images = PosterImage.objects.filter(id__in=image_ids)
         self.assertEqual(len(image_ids), images.count())
 
-    def check_texts(self, fields):
-        for field, value in CREATE_POSTER_FIELDS.items():
-            self.assertEqual(fields[field].get('text'), value.get('text'))
+    def check_texts(self, in_fields, out_fields):
+        def get_texts(f):
+            return sorted(filter(None, [i.get('text') for i in walk_fields(f)]))
+
+        self.assertEqual(get_texts(in_fields), get_texts(out_fields))
 
     def test_spec(self):
         response = self.client.get(reverse('posterspec-list'))
@@ -94,7 +106,7 @@ class TestApi(APITestCase):
 
         fields = dict(response.data)['fields']
         self.check_images_count(fields)
-        self.check_texts(fields)
+        self.check_texts(CREATE_POSTER_FIELDS, fields)
 
     def test_poster_read(self):
         response = self.client.get(reverse('poster-detail', args=[self.poster.pk]))
@@ -102,7 +114,7 @@ class TestApi(APITestCase):
 
         fields = dict(response.data)['fields']
         self.check_images_count(fields)
-        self.check_texts(fields)
+        self.check_texts(CREATE_POSTER_FIELDS, fields)
 
     def test_poster_update(self):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(
@@ -111,4 +123,5 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         fields = dict(response.data)['fields']
-        self.assertEqual(fields['summary']['text'], UPDATE_POSTER_FIELDS['summary']['text'])
+        self.check_images_count(fields)
+        self.check_texts(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
