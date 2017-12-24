@@ -163,3 +163,8 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images_count(fields)
         self.check_texts_equality(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
+
+    def test_poster_update_fails_trying_to_change_spec(self):
+        response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['spec'], ["Poster specification can't be changed."])

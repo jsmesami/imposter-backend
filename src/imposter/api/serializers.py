@@ -58,27 +58,13 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
     spec = serializers.PrimaryKeyRelatedField(queryset=PosterSpec.objects.enabled())
     fields = serializers.JSONField(source='saved_fields')
 
-    @staticmethod
-    def field_params_validator(field_type, field_name, field_params):
-        assert field_type in PosterSpec.FIELD_PARAMS.keys()
+    def update(self, instance, validated_data):
+        if 'spec' in validated_data:
+            raise serializers.ValidationError({
+                'spec': ["Poster specification can't be changed."],
+            })
 
-        editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
-        disallowed_params = sorted(set(field_params.keys()) - editable_params)
-        if disallowed_params:
-            raise ValidationError("Parameters not allowed for {type} field '{name}': {params}".format(
-                type=field_type,
-                name=field_name,
-                params=', '.join(disallowed_params),
-            ))
-
-        mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
-        missing_required_params = sorted(mandatory_params - set(field_params.keys()))
-        if missing_required_params:
-            raise ValidationError("Missing required parameters for {type} field '{name}': {params}".format(
-                type=field_type,
-                name=field_name,
-                params=', '.join(sorted(missing_required_params)),
-            ))
+        return super().update(instance, validated_data)
 
     def validate_fields(self, new_fields):
         if self.instance:
@@ -86,11 +72,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             spec_object = self.instance.spec
         else:
             merged_fields = new_fields
-            spec_id = self.initial_data.get('spec')
-            try:
-                spec_object = PosterSpec.objects.get(pk=spec_id)
-            except PosterSpec.DoesNotExist:
-                raise ValidationError('Cannot retreive poster specification with ID {}.'.format(spec_id))
+            spec_object = PosterSpec.objects.get(pk=self.initial_data.get('spec'))
 
         # Do not allow fields that are not in spec
         disallowed_fields = sorted(
@@ -121,6 +103,28 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         validate_params(new_fields)
 
         return merged_fields
+
+    @staticmethod
+    def field_params_validator(field_type, field_name, field_params):
+        assert field_type in PosterSpec.FIELD_PARAMS.keys()
+
+        editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
+        disallowed_params = sorted(set(field_params.keys()) - editable_params)
+        if disallowed_params:
+            raise ValidationError("Parameters not allowed for {type} field '{name}': {params}".format(
+                type=field_type,
+                name=field_name,
+                params=', '.join(disallowed_params),
+            ))
+
+        mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
+        missing_required_params = sorted(mandatory_params - set(field_params.keys()))
+        if missing_required_params:
+            raise ValidationError("Missing required parameters for {type} field '{name}': {params}".format(
+                type=field_type,
+                name=field_name,
+                params=', '.join(sorted(missing_required_params)),
+            ))
 
     class Meta:
         model = Poster
