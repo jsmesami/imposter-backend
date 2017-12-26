@@ -179,7 +179,7 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, corrupted_image)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ['Incorrect image format'])
+        self.assertEqual(response.data['fields'], ["Incorrect image format. Can't decode image data: main.jpg"])
 
     def test_poster_update_fails_for_unsupported_image_extension(self):
         unsupported_extension = {
@@ -190,7 +190,18 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, unsupported_extension)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ['Incorrect image format'])
+        self.assertEqual(response.data['fields'], ['Incorrect image format. Unsupported image extension: main.pdf'])
+
+    def test_poster_update_fails_for_too_large_image(self):
+        exceeded_image_size = {
+            'main_image': {
+                'filename': 'main.jpg',
+                'data': '*' * (settings.UPLOADED_FILE_MAX_SIZE+1),
+            },
+        }
+        response = self.update_poster(self.poster.pk, exceeded_image_size)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ['Incorrect image format. Image exceeds maximum file size: main.jpg'])
 
     def test_poster_update_fails_trying_to_change_spec(self):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))

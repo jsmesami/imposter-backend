@@ -80,8 +80,8 @@ class PosterSpec(TimeStampedModel):
     def save(self, **kwargs):
         from imposter.models.image import SpecImage
 
-        thumb_data = SpecImage.normalize_data(str(self.thumb))
         thumb_name = slugify(self.name)+'-thumb.jpg'
+        thumb_data = SpecImage.normalize_data(str(self.thumb), thumb_name)
         self.thumb = ContentFile(base64.b64decode(thumb_data), name=thumb_name)
 
         self.fields = deepmerge(

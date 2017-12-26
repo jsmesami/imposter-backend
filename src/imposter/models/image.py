@@ -5,6 +5,7 @@ import os
 from collections import defaultdict
 from uuid import uuid4
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.text import slugify
@@ -34,7 +35,7 @@ class Image(TimeStampedModel):
     file = models.ImageField(upload_to=_upload_to)
 
     @classmethod
-    def normalize_data(cls, image_data):
+    def normalize_data(cls, image_data, filename):
         if image_data is None:  # Ignoring already saved fields
             return None
 
@@ -45,7 +46,10 @@ class Image(TimeStampedModel):
             header, image_data = image_data.split(';base64,')
             ext = header.split('/')[-1]
             if '.' + ext not in cls.CORRECT_EXTENSIONS:
-                raise ImageError('Unsupported image extension: ' + ext)
+                raise ImageError('Unsupported image extension: ' + filename)
+
+        if len(image_data) > settings.UPLOADED_FILE_MAX_SIZE:
+            raise ImageError('Image exceeds maximum file size: ' + filename)
 
         if not image_data:
             raise ImageError('No image data.')
@@ -57,7 +61,7 @@ class Image(TimeStampedModel):
         path, ext = os.path.splitext(filename)
 
         if ext not in cls.CORRECT_EXTENSIONS:
-            raise ImageError('Unsupported image extension: ' + ext)
+            raise ImageError('Unsupported image extension: ' + filename)
 
         try:
             return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
@@ -67,7 +71,8 @@ class Image(TimeStampedModel):
     @classmethod
     def _from_field(cls, field_values):
         existing_image_id = field_values.get('id')
-        new_image_data = cls.normalize_data(field_values.get('data'))
+        filename = field_values.get('filename')
+        new_image_data = cls.normalize_data(field_values.get('data'), filename)
 
         if existing_image_id:
             try:
@@ -79,7 +84,7 @@ class Image(TimeStampedModel):
             except cls.DoesNotExist:
                 pass
 
-        image = cls._from_data(new_image_data, field_values.get('filename'))
+        image = cls._from_data(new_image_data, filename)
         image.save()
 
         return image

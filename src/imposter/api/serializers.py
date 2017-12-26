@@ -53,28 +53,33 @@ class PosterSerializer(serializers.ModelSerializer):
         fields = 'id editable title thumb print bureau spec fields'.split()
 
 
-def handles_exceptions(*exceptions, response):
+def handles_exceptions(*exceptions, msg):
     def wrapper(cls):
+
+        class FieldsError(ValidationError):
+            def __init__(self, detail):
+                super().__init__(dict(fields=[msg.format(detail=detail)]))
+
         class Handler(cls):
 
             def create(self, validated_data):
                 try:
                     return super().create(validated_data)
-                except exceptions:
-                    raise ValidationError(response)
+                except exceptions as e:
+                    raise FieldsError(e)
 
             def update(self, instance, validated_data):
                 try:
                     return super().update(instance, validated_data)
-                except exceptions:
-                    raise ValidationError(response)
+                except exceptions as e:
+                    raise FieldsError(e)
 
         return Handler
 
     return wrapper
 
 
-@handles_exceptions(ImageError, response=dict(fields=['Incorrect image format']))
+@handles_exceptions(ImageError, msg='Incorrect image format. {detail}')
 class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
     bureau = serializers.PrimaryKeyRelatedField(queryset=Bureau.objects.enabled())
