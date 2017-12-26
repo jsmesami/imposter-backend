@@ -1,3 +1,5 @@
+import base64
+
 from copy import deepcopy
 import os
 
@@ -15,13 +17,17 @@ from imposter.models.poster import Poster, walk_fields
 from utils.functional import deepmerge
 
 
+with open(os.path.join(settings.BASE_DIR, 'tests/data/small_image.jpg'), "rb") as image_file:
+    SMALL_IMAGE = str(base64.b64encode(image_file.read()))
+
+
 CREATE_POSTER_FIELDS = {
     'title': {
         'text': 'title',
     },
-    'main_image':  {
-        'filename': 'main.gif',
-        'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
+    'main_image': {
+        'filename': 'main.jpeg',
+        'data': SMALL_IMAGE,
     },
     'event_price': {
         'text': 'price',
@@ -38,12 +44,12 @@ CREATE_POSTER_FIELDS = {
     'partner_logos': {
         'fields': {
             'logo1': {
-                'filename': 'logo1.gif',
-                'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
+                'filename': 'logo1.jpeg',
+                'data': SMALL_IMAGE,
             },
             'logo2': {
-                'filename': 'logo2.gif',
-                'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
+                'filename': 'logo2.jpeg',
+                'data': SMALL_IMAGE,
             },
         },
     },
@@ -56,8 +62,8 @@ UPDATE_POSTER_FIELDS = {
     'partner_logos': {
         'fields': {
             'logo1': {
-                'filename': 'logo3.gif',
-                'data': 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=',
+                'filename': 'logo3.jpeg',
+                'data': SMALL_IMAGE,
             },
         },
     },
@@ -163,6 +169,28 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images_count(fields)
         self.check_texts_equality(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
+
+    def test_poster_update_fails_for_corrupted_image_data(self):
+        corrupted_image = {
+            'main_image': {
+                'filename': 'main.jpg',
+                'data': 'gibberish',
+            },
+        }
+        response = self.update_poster(self.poster.pk, corrupted_image)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ['Incorrect image format'])
+
+    def test_poster_update_fails_for_unsupported_image_extension(self):
+        unsupported_extension = {
+            'main_image': {
+                'filename': 'main.pdf',
+                'data': SMALL_IMAGE,
+            },
+        }
+        response = self.update_poster(self.poster.pk, unsupported_extension)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['fields'], ['Incorrect image format'])
 
     def test_poster_update_fails_trying_to_change_spec(self):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))

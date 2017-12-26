@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from imposter.models.bureau import Bureau
+from imposter.models.image import ImageError
 from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
 from utils.functional import deepmerge
@@ -52,6 +53,28 @@ class PosterSerializer(serializers.ModelSerializer):
         fields = 'id editable title thumb print bureau spec fields'.split()
 
 
+def handles_exceptions(*exceptions, response):
+    def wrapper(cls):
+        class Handler(cls):
+
+            def create(self, validated_data):
+                try:
+                    return super().create(validated_data)
+                except exceptions:
+                    raise ValidationError(response)
+
+            def update(self, instance, validated_data):
+                try:
+                    return super().update(instance, validated_data)
+                except exceptions:
+                    raise ValidationError(response)
+
+        return Handler
+
+    return wrapper
+
+
+@handles_exceptions(ImageError, response=dict(fields=['Incorrect image format']))
 class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
     bureau = serializers.PrimaryKeyRelatedField(queryset=Bureau.objects.enabled())

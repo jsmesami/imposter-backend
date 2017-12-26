@@ -1,4 +1,5 @@
 import base64
+import binascii
 import os
 
 from collections import defaultdict
@@ -12,9 +13,14 @@ from utils.functional import deepmerge
 from utils.models import TimeStampedModel
 
 
+class ImageError(Exception):
+    pass
+
+
 class Image(TimeStampedModel):
 
     BASE_PATH = 'images'
+    CORRECT_EXTENSIONS = '.jpeg', '.jpg'
 
     def _upload_to(self, filename):
         name, extension = os.path.splitext(filename)
@@ -27,22 +33,36 @@ class Image(TimeStampedModel):
 
     file = models.ImageField(upload_to=_upload_to)
 
-    @staticmethod
-    def normalize_data(image_data):
-        if image_data is None:
+    @classmethod
+    def normalize_data(cls, image_data):
+        if image_data is None:  # Ignoring already saved fields
             return None
 
         if not isinstance(image_data, str):
-            raise ValueError('Image data must be string.')
+            raise ImageError('Image data must be a string.')
 
         if 'data:' in image_data and ';base64,' in image_data:
             header, image_data = image_data.split(';base64,')
+            ext = header.split('/')[-1]
+            if '.' + ext not in cls.CORRECT_EXTENSIONS:
+                raise ImageError('Unsupported image extension: ' + ext)
+
+        if not image_data:
+            raise ImageError('No image data.')
 
         return image_data
 
     @classmethod
     def _from_data(cls, image_data, filename):
-        return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
+        path, ext = os.path.splitext(filename)
+
+        if ext not in cls.CORRECT_EXTENSIONS:
+            raise ImageError('Unsupported image extension: ' + ext)
+
+        try:
+            return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
+        except binascii.Error:
+            raise ImageError("Can't decode image data: " + filename)
 
     @classmethod
     def _from_field(cls, field_values):
