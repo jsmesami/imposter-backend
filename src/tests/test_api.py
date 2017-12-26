@@ -1,9 +1,10 @@
 import base64
-
+import datetime
 from copy import deepcopy
 import os
 
 import factory
+from freezegun import freeze_time
 
 from django.conf import settings
 from django.core.management import call_command
@@ -68,6 +69,8 @@ UPDATE_POSTER_FIELDS = {
         },
     },
 }
+
+TOMORROW = datetime.datetime.today() + datetime.timedelta(days=1)
 
 
 class PosterFactory(factory.DjangoModelFactory):
@@ -202,6 +205,12 @@ class TestApi(APITestCase):
         response = self.update_poster(self.poster.pk, exceeded_image_size)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['fields'], ['Incorrect image format. Image exceeds maximum file size: main.jpg'])
+
+    @freeze_time(TOMORROW)
+    def test_poster_update_fails_because_its_another_day(self):
+        response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, ["Poster can't be updated."])
 
     def test_poster_update_fails_trying_to_change_spec(self):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))

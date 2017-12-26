@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from django.contrib.postgres.fields.jsonb import JSONField
@@ -37,7 +38,7 @@ class Poster(TimeStampedModel):
     @property
     def editable(self):
         """Poster is editable only the day it was created."""
-        return self.modified.date() == self.created.date()
+        return datetime.datetime.today().date() == self.created.date()
 
     @property
     def title(self):
