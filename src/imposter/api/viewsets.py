@@ -1,5 +1,6 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions, response, status, viewsets
 
+from imposter.api.permissions import IsObjectEditable
 from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterCreateUpdateSerializer
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
@@ -18,6 +19,7 @@ class PosterSpecViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PosterViewSet(viewsets.ModelViewSet):
     queryset = Poster.objects.select_related('bureau', 'spec')
+    permission_classes = IsObjectEditable,
 
     def filter_queryset(self, queryset):
 
@@ -45,6 +47,12 @@ class PosterViewSet(viewsets.ModelViewSet):
             qs = qs[offset:offset+limit]
 
         return qs
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        # Avoiding HTTP_204_NO_CONTENT
+        return response.Response(dict(detail='Successfully deleted.'), status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         if self.request.method in permissions.SAFE_METHODS:

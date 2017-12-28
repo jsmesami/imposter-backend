@@ -87,11 +87,6 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
     fields = serializers.JSONField(source='saved_fields')
 
     def update(self, instance, validated_data):
-        if not instance.editable:
-            raise serializers.ValidationError(
-                "Poster can't be updated."
-            )
-
         if 'spec' in validated_data:
             raise serializers.ValidationError({
                 'spec': ["Poster specification can't be changed."],

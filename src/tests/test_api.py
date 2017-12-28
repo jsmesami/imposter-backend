@@ -115,6 +115,9 @@ class TestApi(APITestCase):
     def update_poster(self, pk, fields):
         return self.client.patch(reverse('poster-detail', args=[pk]), data=dict(fields=fields))
 
+    def delete_poster(self, pk):
+        return self.client.delete(reverse('poster-detail', args=[pk]))
+
     def test_poster_create_success(self):
         response = self.create_poster(CREATE_POSTER_FIELDS)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -199,7 +202,7 @@ class TestApi(APITestCase):
         exceeded_image_size = {
             'main_image': {
                 'filename': 'main.jpg',
-                'data': '*' * (settings.UPLOADED_FILE_MAX_SIZE+1),
+                'data': '*' * (settings.UPLOADED_FILE_MAX_SIZE + 1),
             },
         }
         response = self.update_poster(self.poster.pk, exceeded_image_size)
@@ -209,10 +212,19 @@ class TestApi(APITestCase):
     @freeze_time(TOMORROW)
     def test_poster_update_fails_because_its_another_day(self):
         response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data, ["Poster can't be updated."])
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_poster_update_fails_trying_to_change_spec(self):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['spec'], ["Poster specification can't be changed."])
+
+    def test_poster_delete_success(self):
+        response = self.delete_poster(self.poster.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['detail'], 'Successfully deleted.')
+
+    @freeze_time(TOMORROW)
+    def test_poster_delete_fails_because_its_another_day(self):
+        response = self.delete_poster(self.poster.pk)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
