@@ -21,7 +21,6 @@ class ImageError(Exception):
 class Image(TimeStampedModel):
 
     BASE_PATH = 'images'
-    CORRECT_EXTENSIONS = '.jpeg', '.jpg'
 
     def _upload_to(self, filename):
         name, extension = os.path.splitext(filename)
@@ -34,8 +33,8 @@ class Image(TimeStampedModel):
 
     file = models.ImageField(upload_to=_upload_to)
 
-    @classmethod
-    def normalize_data(cls, image_data, filename):
+    @staticmethod
+    def normalize_data(image_data, filename):
         if image_data is None:  # Ignoring already saved fields
             return None
 
@@ -45,7 +44,7 @@ class Image(TimeStampedModel):
         if 'data:' in image_data and ';base64,' in image_data:
             header, image_data = image_data.split(';base64,')
             ext = header.split('/')[-1]
-            if '.' + ext not in cls.CORRECT_EXTENSIONS:
+            if '.' + ext not in settings.SUPPORTED_IMAGE_EXTENSIONS:
                 raise ImageError('Unsupported image extension: ' + filename)
 
         if len(image_data) > settings.UPLOADED_FILE_MAX_SIZE:
@@ -60,7 +59,7 @@ class Image(TimeStampedModel):
     def _from_data(cls, image_data, filename):
         path, ext = os.path.splitext(filename)
 
-        if ext not in cls.CORRECT_EXTENSIONS:
+        if ext not in settings.SUPPORTED_IMAGE_EXTENSIONS:
             raise ImageError('Unsupported image extension: ' + filename)
 
         try:

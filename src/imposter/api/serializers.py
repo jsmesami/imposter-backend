@@ -79,7 +79,7 @@ def handles_exceptions(*exceptions, msg):
     return wrapper
 
 
-@handles_exceptions(ImageError, msg='Incorrect image format. {detail}')
+@handles_exceptions(ImageError, msg='Incorrect image. {detail}')
 class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
     bureau = serializers.PrimaryKeyRelatedField(queryset=Bureau.objects.enabled())

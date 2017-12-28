@@ -118,6 +118,8 @@ class TestApi(APITestCase):
     def delete_poster(self, pk):
         return self.client.delete(reverse('poster-detail', args=[pk]))
 
+    # Test CREATE
+
     def test_poster_create_success(self):
         response = self.create_poster(CREATE_POSTER_FIELDS)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -160,6 +162,8 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['fields'], ["Missing required parameters for text field 'title': text"])
 
+    # Test READ
+
     def test_poster_read_success(self):
         response = self.read_poster(self.poster.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -167,6 +171,8 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images_count(fields)
         self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
+
+    # Test UPDATE
 
     def test_poster_update_success(self):
         response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
@@ -185,7 +191,7 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, corrupted_image)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ["Incorrect image format. Can't decode image data: main.jpg"])
+        self.assertEqual(response.data['fields'], ["Incorrect image. Can't decode image data: main.jpg"])
 
     def test_poster_update_fails_for_unsupported_image_extension(self):
         unsupported_extension = {
@@ -196,7 +202,7 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, unsupported_extension)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ['Incorrect image format. Unsupported image extension: main.pdf'])
+        self.assertEqual(response.data['fields'], ['Incorrect image. Unsupported image extension: main.pdf'])
 
     def test_poster_update_fails_for_too_large_image(self):
         exceeded_image_size = {
@@ -207,7 +213,7 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, exceeded_image_size)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ['Incorrect image format. Image exceeds maximum file size: main.jpg'])
+        self.assertEqual(response.data['fields'], ['Incorrect image. Image exceeds maximum file size: main.jpg'])
 
     @freeze_time(TOMORROW)
     def test_poster_update_fails_because_its_another_day(self):
@@ -218,6 +224,8 @@ class TestApi(APITestCase):
         response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['spec'], ["Poster specification can't be changed."])
+
+    # Test DELETE
 
     def test_poster_delete_success(self):
         response = self.delete_poster(self.poster.pk)
