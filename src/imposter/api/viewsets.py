@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext as _
+
 from rest_framework import permissions, response, status, viewsets
 
 from imposter.api.permissions import IsObjectEditable
@@ -52,7 +54,7 @@ class PosterViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         self.perform_destroy(instance)
         # Avoiding HTTP_204_NO_CONTENT
-        return response.Response(dict(detail='Successfully deleted.'), status=status.HTTP_200_OK)
+        return response.Response(dict(detail=_('Successfully deleted.')), status=status.HTTP_200_OK)
 
     def get_serializer_class(self):
         if self.request.method in permissions.SAFE_METHODS:

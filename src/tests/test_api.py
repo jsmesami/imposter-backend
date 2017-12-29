@@ -91,20 +91,24 @@ class TestApi(APITestCase):
         call_command('load_specs')
         cls.poster = PosterFactory()
 
+    def test_spec_listing_success(self):
+        response = self.client.get(reverse('posterspec-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_bureau_listing_success(self):
+        response = self.client.get(reverse('bureau-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def check_images_count(self, fields):
         image_ids = list(filter(None, [i.get('id') for i in walk_fields(fields)]))
         images = PosterImage.objects.filter(id__in=image_ids)
         self.assertEqual(len(image_ids), images.count())
 
     def check_texts_equality(self, in_fields, out_fields):
-        def get_texts(f):
-            return sorted(filter(None, [i.get('text') for i in walk_fields(f)]))
+        def get_texts(fields):
+            return sorted(filter(None, [i.get('text') for i in walk_fields(fields)]))
 
         self.assertEqual(get_texts(in_fields), get_texts(out_fields))
-
-    def test_spec(self):
-        response = self.client.get(reverse('posterspec-list'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def create_poster(self, fields):
         return self.client.post(reverse('poster-list'), data=dict(bureau=1, spec=1, fields=fields))
@@ -118,7 +122,7 @@ class TestApi(APITestCase):
     def delete_poster(self, pk):
         return self.client.delete(reverse('poster-detail', args=[pk]))
 
-    # Test CREATE
+    # Test poster CREATE
 
     def test_poster_create_success(self):
         response = self.create_poster(CREATE_POSTER_FIELDS)
@@ -162,7 +166,7 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['fields'], ["Missing required parameters for text field 'title': text"])
 
-    # Test READ
+    # Test poster READ
 
     def test_poster_read_success(self):
         response = self.read_poster(self.poster.pk)
@@ -172,7 +176,7 @@ class TestApi(APITestCase):
         self.check_images_count(fields)
         self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
 
-    # Test UPDATE
+    # Test poster UPDATE
 
     def test_poster_update_success(self):
         response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
@@ -202,7 +206,7 @@ class TestApi(APITestCase):
         }
         response = self.update_poster(self.poster.pk, unsupported_extension)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['fields'], ['Incorrect image. Unsupported image extension: main.pdf'])
+        self.assertEqual(response.data['fields'], ['Incorrect image. Unsupported image file extension: main.pdf'])
 
     def test_poster_update_fails_for_too_large_image(self):
         exceeded_image_size = {
@@ -225,7 +229,7 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['spec'], ["Poster specification can't be changed."])
 
-    # Test DELETE
+    # Test poster DELETE
 
     def test_poster_delete_success(self):
         response = self.delete_poster(self.poster.pk)

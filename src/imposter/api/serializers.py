@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext as _
+
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -79,7 +81,7 @@ def handles_exceptions(*exceptions, msg):
     return wrapper
 
 
-@handles_exceptions(ImageError, msg='Incorrect image. {detail}')
+@handles_exceptions(ImageError, msg=_('Incorrect image. {detail}'))
 class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
     bureau = serializers.PrimaryKeyRelatedField(queryset=Bureau.objects.enabled())
@@ -89,7 +91,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'spec' in validated_data:
             raise serializers.ValidationError({
-                'spec': ["Poster specification can't be changed."],
+                'spec': [_("Poster specification can't be changed.")],
             })
 
         return super().update(instance, validated_data)
@@ -108,7 +110,9 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             set(spec_object.editable_fields.keys())
         )
         if disallowed_fields:
-            raise ValidationError('Fields not allowed: ' + ', '.join(disallowed_fields))
+            raise ValidationError(
+                _('Fields not allowed: {fields}').format(fields=', '.join(disallowed_fields))
+            )
 
         # Check if all required fields are present
         missing_required_fields = sorted(
@@ -116,7 +120,9 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             set(merged_fields.keys())
         )
         if missing_required_fields:
-            raise ValidationError('Missing required fields: ' + ', '.join(missing_required_fields))
+            raise ValidationError(
+                _('Missing required fields: {fields}').format(fields=', '.join(missing_required_fields))
+            )
 
         # Recursively check if new fields have valid parameters
         def validate_params(fields, parent_type=None):
@@ -139,7 +145,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
         disallowed_params = sorted(set(field_params.keys()) - editable_params)
         if disallowed_params:
-            raise ValidationError("Parameters not allowed for {type} field '{name}': {params}".format(
+            raise ValidationError(_("Parameters not allowed for {type} field '{name}': {params}").format(
                 type=field_type,
                 name=field_name,
                 params=', '.join(disallowed_params),
@@ -148,7 +154,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
         mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
         missing_required_params = sorted(mandatory_params - set(field_params.keys()))
         if missing_required_params:
-            raise ValidationError("Missing required parameters for {type} field '{name}': {params}".format(
+            raise ValidationError(_("Missing required parameters for {type} field '{name}': {params}").format(
                 type=field_type,
                 name=field_name,
                 params=', '.join(sorted(missing_required_params)),

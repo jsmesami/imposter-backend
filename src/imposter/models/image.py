@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import ugettext as _
 
 from utils.functional import deepmerge
 from utils.models import TimeStampedModel
@@ -39,19 +40,19 @@ class Image(TimeStampedModel):
             return None
 
         if not isinstance(image_data, str):
-            raise ImageError('Image data must be a string.')
+            raise ImageError(_('Image data must be a string.'))
 
         if 'data:' in image_data and ';base64,' in image_data:
             header, image_data = image_data.split(';base64,')
             ext = header.split('/')[-1]
             if '.' + ext not in settings.SUPPORTED_IMAGE_EXTENSIONS:
-                raise ImageError('Unsupported image extension: ' + filename)
+                raise ImageError(_('Unsupported image file extension: {filename}').format(filename=filename))
 
         if len(image_data) > settings.UPLOADED_FILE_MAX_SIZE:
-            raise ImageError('Image exceeds maximum file size: ' + filename)
+            raise ImageError(_('Image exceeds maximum file size: {filename}').format(filename=filename))
 
         if not image_data:
-            raise ImageError('No image data.')
+            raise ImageError(_('No image data.'))
 
         return image_data
 
@@ -60,12 +61,12 @@ class Image(TimeStampedModel):
         path, ext = os.path.splitext(filename)
 
         if ext not in settings.SUPPORTED_IMAGE_EXTENSIONS:
-            raise ImageError('Unsupported image extension: ' + filename)
+            raise ImageError(_('Unsupported image file extension: {filename}').format(filename=filename))
 
         try:
             return cls(file=ContentFile(base64.b64decode(image_data), name=filename))
         except binascii.Error:
-            raise ImageError("Can't decode image data: " + filename)
+            raise ImageError(_("Can't decode image data: {filename}").format(filename=filename))
 
     @classmethod
     def _from_field(cls, field_values):
