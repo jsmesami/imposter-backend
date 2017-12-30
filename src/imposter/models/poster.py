@@ -2,8 +2,10 @@ import datetime
 import os
 
 from django.contrib.postgres.fields.jsonb import JSONField
+from django.core.files.base import ContentFile
 from django.db import models
 
+from imposter.generator import render_pdf, render_jpg
 from imposter.models.bureau import Bureau
 from imposter.models.image import PosterImage
 from imposter.models.posterspec import PosterSpec
@@ -18,11 +20,14 @@ class Poster(TimeStampedModel):
     saved_fields = JSONField(editable=False)  # Fields from spec with saved values
 
     def _upload_to(self, filename):
-        name_template = '{p.id:05d}_{p.bureau.number:02d}_{p.bureau.abbrev}_{p.spec.title}_{created}'
         _, extension = os.path.splitext(filename)
-        return 'posters/{filename}.{extension}'.format(
-            filename=name_template.format(
+
+        return 'posters/{filename}{extension}'.format(
+            filename='{id:05d}_{bureau.number:02d}_{bureau.abbrev}_{title}_{created}'.format(
                 p=self,
+                id=self.id,
+                bureau=self.bureau,
+                title=self.title,
                 created='{d:02d}{m:02d}{y}'.format(
                     d=self.created.day,
                     m=self.created.month,
@@ -45,19 +50,18 @@ class Poster(TimeStampedModel):
         return (self.saved_fields.get('title', {}).get('text') or
                 "Poster {self.id} ({self.spec.name})".format(self=self))
 
-    def generate_print(self):
-        return "TODO"
-
-    def generate_thumb(self):
-        return self.print
-
     def save(self, **kwargs):
-        self.print = self.generate_print()
-        self.thumb = self.generate_thumb()
-
         self.saved_fields = PosterImage.save_images_from_fields(deepmerge(self.saved_fields, self.spec.editable_fields))
 
-        super().save(**kwargs)
+        super().save(**kwargs)  # Save to get the poster ID
+
+        pdf = render_pdf()
+        self.print = ContentFile(pdf, name='dummy.pdf')
+
+        thumb = render_jpg(pdf)
+        self.thumb = ContentFile(thumb, name='dummy.jpeg')
+
+        super().save(force_update=True)
 
 
 def walk_fields(fields):

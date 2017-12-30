@@ -14,6 +14,8 @@ A standalone repository of Django backend API for ClojureScript
 
 * Python 3.5+
 * PostgreSQL
+* Ghostscript 
+* ImageMagick
 
 ## Installation
 
