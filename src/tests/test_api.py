@@ -97,15 +97,22 @@ class TestApi(APITestCase):
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree(MEDIA_ROOT)
+        shutil.rmtree(MEDIA_ROOT)  # Clean up test media
         super().tearDownClass()
 
-    def check_images_count(self, fields):
-        image_ids = list(filter(None, [i.get('id') for i in walk_fields(fields)]))
-        images = PosterImage.objects.filter(id__in=image_ids)
-        self.assertEqual(len(image_ids), images.count())
+    def check_images(self, fields):
+        images_lookup = {i['id']: i['url'] for i in walk_fields(fields) if 'id' in i}
+        images_qs = PosterImage.objects.filter(id__in=images_lookup.keys())
 
-    def check_texts_equality(self, in_fields, out_fields):
+        for i in images_qs.iterator():
+            # file url == field url
+            self.assertEqual(i.file.url, images_lookup[i.pk])
+
+        for path in (i.file.path for i in images_qs.iterator()):
+            # file exists and size > 0
+            self.assertTrue(os.path.isfile(path) and os.path.getsize(path))
+
+    def check_texts(self, in_fields, out_fields):
         def get_texts(fields):
             return sorted(filter(None, [i.get('text') for i in walk_fields(fields)]))
 
@@ -140,8 +147,8 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         fields = response.data['fields']
-        self.check_images_count(fields)
-        self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
+        self.check_images(fields)
+        self.check_texts(CREATE_POSTER_FIELDS, fields)
 
     def test_poster_create_fails_with_disallowed_fields(self):
         disallowed_fields = {
@@ -184,8 +191,8 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         fields = response.data['fields']
-        self.check_images_count(fields)
-        self.check_texts_equality(CREATE_POSTER_FIELDS, fields)
+        self.check_images(fields)
+        self.check_texts(CREATE_POSTER_FIELDS, fields)
 
     # Test poster UPDATE
 
@@ -194,8 +201,8 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         fields = response.data['fields']
-        self.check_images_count(fields)
-        self.check_texts_equality(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
+        self.check_images(fields)
+        self.check_texts(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
 
     def test_poster_update_fails_for_corrupted_image_data(self):
         corrupted_image = {
