@@ -2,12 +2,14 @@ import base64
 import datetime
 from copy import deepcopy
 import os
+import shutil
 
 import factory
 from freezegun import freeze_time
 
 from django.conf import settings
 from django.core.management import call_command
+from django.test import override_settings
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -71,6 +73,7 @@ UPDATE_POSTER_FIELDS = {
 }
 
 TOMORROW = datetime.datetime.today() + datetime.timedelta(days=1)
+MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'tests/media')
 
 
 class PosterFactory(factory.DjangoModelFactory):
@@ -83,6 +86,7 @@ class PosterFactory(factory.DjangoModelFactory):
     saved_fields = CREATE_POSTER_FIELDS
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class TestApi(APITestCase):
 
     @classmethod
@@ -91,13 +95,10 @@ class TestApi(APITestCase):
         call_command('load_specs')
         cls.poster = PosterFactory()
 
-    def test_spec_listing_success(self):
-        response = self.client.get(reverse('posterspec-list'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_bureau_listing_success(self):
-        response = self.client.get(reverse('bureau-list'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT)
+        super().tearDownClass()
 
     def check_images_count(self, fields):
         image_ids = list(filter(None, [i.get('id') for i in walk_fields(fields)]))
@@ -121,6 +122,16 @@ class TestApi(APITestCase):
 
     def delete_poster(self, pk):
         return self.client.delete(reverse('poster-detail', args=[pk]))
+
+    # Test resources listing
+
+    def test_spec_listing_success(self):
+        response = self.client.get(reverse('posterspec-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_bureau_listing_success(self):
+        response = self.client.get(reverse('bureau-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Test poster CREATE
 
