@@ -3,6 +3,8 @@
 The backend part of automated poster generation system for 
 Municipal Library of Prague.
 
+[![Build Status](https://travis-ci.org/jsmesami/imposter-backend.svg?branch=master)](https://travis-ci.org/jsmesami/imposter-backend)
+
 ## Overview
 
 A standalone repository of Django backend API for ClojureScript
@@ -14,7 +16,7 @@ A standalone repository of Django backend API for ClojureScript
 
 * Python 3.5+
 * PostgreSQL
-* Ghostscript 
+* Ghostscript
 * ImageMagick
 
 ## Installation
