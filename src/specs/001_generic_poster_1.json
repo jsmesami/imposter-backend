@@ -32,7 +32,6 @@
     },
     "bureau_address": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -48,7 +47,6 @@
     },
     "title": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -56,7 +54,6 @@
     },
     "subtitle": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -64,7 +61,6 @@
     },
     "summary": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -72,7 +68,6 @@
     },
     "event_date": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -80,7 +75,6 @@
     },
     "event_price": {
       "font_size": 16,
-      "char_limit": 200,
       "x": -100,
       "y": -100,
       "w": 50,
@@ -130,6 +124,7 @@
     "bureau_address": {
       "type": "text",
       "name": "Adresa pobočky",
+      "char_limit": 200,
       "mandatory": true
     },
     "main_image": {
@@ -140,25 +135,30 @@
     "title": {
       "type": "text",
       "name": "Titul",
+      "char_limit": 200,
       "mandatory": true
     },
     "subtitle": {
       "type": "text",
+      "char_limit": 200,
       "name": "Podtitul"
     },
     "summary": {
       "type": "text",
       "name": "Anotace",
+      "char_limit": 200,
       "mandatory": true
     },
     "event_date": {
       "type": "text",
       "name": "Datum konání akce",
+      "char_limit": 200,
       "mandatory": true
     },
     "event_price": {
       "type": "text",
       "name": "Cena akce",
+      "char_limit": 200,
       "mandatory": true
     },
     "partner_logos": {

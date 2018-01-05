@@ -130,7 +130,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 field_type = spec_object.fields.get(field_name, {}).get('type')
                 children = field_params.get('fields')
                 if children:
-                    validate_params(children, field_type)
+                    validate_params(children, parent_type=field_type)
                 else:
                     self.field_params_validator(parent_type or field_type, field_name, field_params)
 
