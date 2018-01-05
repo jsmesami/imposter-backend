@@ -23,7 +23,7 @@ class Poster(TimeStampedModel):
         _, extension = os.path.splitext(filename)
 
         return 'posters/{filename}{extension}'.format(
-            filename='{id:05d}_{bureau.number:02d}_{bureau.abbrev}_{title}_{created}'.format(
+            filename='{id:05d}_{bureau.abbrev}_{title}_{created}'.format(
                 p=self,
                 id=self.id,
                 bureau=self.bureau,

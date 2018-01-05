@@ -7,7 +7,6 @@ class Bureau(models.Model):
 
     name = models.CharField(max_length=255)
     abbrev = models.CharField(max_length=8)
-    number = models.PositiveSmallIntegerField()
     address = models.CharField(max_length=255)
     disabled = models.BooleanField(default=False)
 

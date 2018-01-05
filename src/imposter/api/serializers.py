@@ -14,7 +14,7 @@ class BureauSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bureau
-        fields = 'id name abbrev number address'.split()
+        fields = 'id name abbrev address'.split()
 
 
 class SpecListSerializer(serializers.ModelSerializer):
