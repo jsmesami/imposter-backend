@@ -62,11 +62,3 @@ class Poster(TimeStampedModel):
         self.thumb = ContentFile(thumb, name='dummy.jpeg')
 
         super().save(force_update=True)
-
-
-def walk_fields(fields):
-    for field, values in fields.items():
-        if 'fields' in values:
-            yield from walk_fields(values['fields'])
-        else:
-            yield values

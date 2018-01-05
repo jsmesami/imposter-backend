@@ -77,6 +77,14 @@ class PosterSpec(TimeStampedModel):
     def editable_fields(self):
         return self.get_editable_fields(self.fields)
 
+    @classmethod
+    def walk_fields(cls, fields):
+        for field, values in fields.items():
+            if 'fields' in values:
+                yield from cls.walk_fields(values['fields'])
+            else:
+                yield values
+
     def save(self, **kwargs):
         from imposter.models.image import SpecImage
 

@@ -16,7 +16,8 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from imposter.models.image import PosterImage
-from imposter.models.poster import Poster, walk_fields
+from imposter.models.poster import Poster
+from imposter.models.posterspec import PosterSpec
 from utils.functional import deepmerge
 
 
@@ -101,7 +102,8 @@ class TestApi(APITestCase):
         super().tearDownClass()
 
     def check_images(self, fields):
-        images_lookup = {i['id']: i['url'] for i in walk_fields(fields) if 'id' in i}
+        image_fields = PosterSpec.get_image_fields(fields)
+        images_lookup = {i['id']: i['url'] for i in PosterSpec.walk_fields(image_fields)}
         images_qs = PosterImage.objects.filter(id__in=images_lookup.keys())
 
         for i in images_qs.iterator():
@@ -114,7 +116,7 @@ class TestApi(APITestCase):
 
     def check_texts(self, in_fields, out_fields):
         def get_texts(fields):
-            return sorted(filter(None, [i.get('text') for i in walk_fields(fields)]))
+            return sorted(filter(None, [i.get('text') for i in PosterSpec.walk_fields(fields)]))
 
         self.assertEqual(get_texts(in_fields), get_texts(out_fields))
 
