@@ -7,6 +7,7 @@ from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSer
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
+from utils import cast
 
 
 class BureauViewSet(viewsets.ReadOnlyModelViewSet):
@@ -35,17 +36,17 @@ class PosterViewSet(viewsets.ModelViewSet):
         if until:
             qs = qs.filter(created__lte=until)
 
-        bureau = self.request.query_params.get('bureau')
+        bureau = cast(self.request.query_params.get('bureau'), int)
         if bureau:
             qs = qs.filter(bureau_id=bureau)
 
-        template = self.request.query_params.get('template')
+        template = cast(self.request.query_params.get('template'), int)
         if template:
             qs = qs.filter(spec_id=template)
 
-        limit = self.request.query_params.get('limit')
+        limit = cast(self.request.query_params.get('limit'), int)
         if limit:
-            offset = self.request.query_params.get('offset', 0)
+            offset = int(self.request.query_params.get('offset', 0))
             qs = qs[offset:offset+limit]
 
         return qs
