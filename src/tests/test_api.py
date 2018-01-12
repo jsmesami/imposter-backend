@@ -102,8 +102,9 @@ class TestApi(APITestCase):
         super().tearDownClass()
 
     def check_images(self, fields):
-        image_fields = PosterSpec.get_image_fields(fields)
-        images_lookup = {i['id']: i['url'] for i in PosterSpec.walk_fields(image_fields)}
+        images_lookup = dict(
+            PosterSpec.walk_fields(fields, lambda t, n, p: (p['id'], p['url']) if t == 'image' else None)
+        )
         images_qs = PosterImage.objects.filter(id__in=images_lookup.keys())
 
         for i in images_qs.iterator():
@@ -116,8 +117,9 @@ class TestApi(APITestCase):
 
     def check_texts(self, in_fields, out_fields):
         def get_texts(fields):
-            return sorted(filter(None, [i.get('text') for i in PosterSpec.walk_fields(fields)]))
-
+            return sorted(
+                PosterSpec.walk_fields(fields, lambda t, n, p: p.get('text'))
+            )
         self.assertEqual(get_texts(in_fields), get_texts(out_fields))
 
     def create_poster(self, fields):

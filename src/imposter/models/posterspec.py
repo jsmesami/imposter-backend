@@ -13,7 +13,9 @@ from utils.models import TimeStampedModel
 
 
 class PosterSpec(TimeStampedModel):
-    """Provides specification (template) for poster creation"""
+    """
+    Provides specification (template) for poster creation
+    """
 
     name = models.CharField(max_length=255, unique=True)
     w = models.PositiveIntegerField()
@@ -78,12 +80,19 @@ class PosterSpec(TimeStampedModel):
         return self.get_editable_fields(self.fields)
 
     @classmethod
-    def walk_fields(cls, fields):
-        for field, values in fields.items():
-            if 'fields' in values:
-                yield from cls.walk_fields(values['fields'])
+    def walk_fields(cls, fields, callback, parent_type=None):
+        """
+        For each field and subfield, yields results of callback(field_type, field_name, field_params) if not None
+        """
+        for field_name, field_params in fields.items():
+            field_type = field_params.get('type')
+            children = field_params.get('fields')
+            if children:
+                yield from cls.walk_fields(children, callback, parent_type=field_type)
             else:
-                yield values
+                result = callback(parent_type or field_type, field_name, field_params)
+                if result is not None:
+                    yield result
 
     def save(self, **kwargs):
         from imposter.models.image import SpecImage

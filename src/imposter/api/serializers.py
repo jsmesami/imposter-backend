@@ -157,7 +157,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
             raise ValidationError(_("Missing required parameters for {type} field '{name}': {params}").format(
                 type=field_type,
                 name=field_name,
-                params=', '.join(sorted(missing_required_params)),
+                params=', '.join(missing_required_params),
             ))
 
     class Meta:
