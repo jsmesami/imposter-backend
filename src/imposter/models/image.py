@@ -91,25 +91,21 @@ class Image(TimeStampedModel):
 
     @classmethod
     def save_images_from_fields(cls, fields):
-        """Given fields, save Image objects and return fields with transformed image data."""
+        """
+        Within fields, substitute base64-encoded images for urls to image files saved to disk.
+        """
+        from imposter.models.posterspec import PosterSpec  # local import because of cross-reference
 
-        def transform_image_fields(source_fields):
-            transformed_fields = defaultdict(dict)
-            for field_name, field_values in source_fields.items():
-                children = field_values.get('fields')
-                if children:
-                    transformed_fields[field_name]['fields'] = transform_image_fields(children)
-                else:
-                    image = cls._from_field(field_values)
-                    transformed_fields[field_name]['data'] = None
-                    transformed_fields[field_name]['id'] = image.pk
-                    transformed_fields[field_name]['filename'] = None
-                    transformed_fields[field_name]['url'] = image.file.url
-            return transformed_fields
+        transformed_fields = defaultdict(dict)
 
-        from imposter.models.posterspec import PosterSpec
+        for field_name, field_values in PosterSpec.get_image_fields(fields).items():
+            image = cls._from_field(field_values)
+            transformed_fields[field_name]['data'] = None
+            transformed_fields[field_name]['id'] = image.pk
+            transformed_fields[field_name]['filename'] = None
+            transformed_fields[field_name]['url'] = image.file.url
 
-        return deepmerge(transform_image_fields(PosterSpec.get_image_fields(fields)), fields)
+        return deepmerge(transformed_fields, fields)
 
     class Meta:
         abstract = True

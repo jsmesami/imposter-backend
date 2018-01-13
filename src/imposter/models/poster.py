@@ -42,7 +42,9 @@ class Poster(TimeStampedModel):
 
     @property
     def editable(self):
-        """Poster is editable only the day it was created."""
+        """
+        Poster editability: poster is editable only the day it was created.
+        """
         return datetime.datetime.today().date() == self.created.date()
 
     @property
@@ -51,9 +53,16 @@ class Poster(TimeStampedModel):
                 "Poster {self.id} ({self.spec.name})".format(self=self))
 
     def save(self, **kwargs):
-        self.saved_fields = PosterImage.save_images_from_fields(deepmerge(self.saved_fields, self.spec.editable_fields))
+        # Fields being saved need to be populated with data from spec, not present in request.
+        populated_fields = deepmerge(
+            self.saved_fields,
+            {k: v for (k, v) in self.spec.fields.items() if k in self.saved_fields}
+        )
 
-        super().save(**kwargs)  # Save to get the poster ID
+        self.saved_fields = PosterImage.save_images_from_fields(populated_fields)
+
+        # Save to get the poster ID
+        super().save(**kwargs)
 
         pdf = render_pdf()
         self.print = ContentFile(pdf, name='dummy.pdf')

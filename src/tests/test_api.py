@@ -17,7 +17,6 @@ from rest_framework.test import APITestCase
 
 from imposter.models.image import PosterImage
 from imposter.models.poster import Poster
-from imposter.models.posterspec import PosterSpec
 from utils.functional import deepmerge
 
 
@@ -45,17 +44,9 @@ CREATE_POSTER_FIELDS = {
     'bureau_address': {
         'text': 'address',
     },
-    'partner_logos': {
-        'fields': {
-            'logo1': {
-                'filename': 'logo1.jpeg',
-                'data': SMALL_IMAGE,
-            },
-            'logo2': {
-                'filename': 'logo2.jpeg',
-                'data': SMALL_IMAGE,
-            },
-        },
+    'partner_logo_1': {
+        'filename': 'logo1.jpeg',
+        'data': SMALL_IMAGE,
     },
 }
 
@@ -63,13 +54,13 @@ UPDATE_POSTER_FIELDS = {
     'summary': {
         'text': 'updated',
     },
-    'partner_logos': {
-        'fields': {
-            'logo1': {
-                'filename': 'logo3.jpeg',
-                'data': SMALL_IMAGE,
-            },
-        },
+    'partner_logo_1': {
+        'filename': 'logo1_replaced.jpeg',
+        'data': SMALL_IMAGE,
+    },
+    'partner_logo_2': {
+        'filename': 'logo2_added.jpeg',
+        'data': SMALL_IMAGE,
     },
 }
 
@@ -102,24 +93,19 @@ class TestApi(APITestCase):
         super().tearDownClass()
 
     def check_images(self, fields):
-        images_lookup = dict(
-            PosterSpec.walk_fields(fields, lambda t, n, p: (p['id'], p['url']) if t == 'image' else None)
-        )
+        images_lookup = {f['id']: f['url'] for f in fields.values() if f['type'] == 'image'}
         images_qs = PosterImage.objects.filter(id__in=images_lookup.keys())
 
         for i in images_qs.iterator():
-            # file url == field url
-            self.assertEqual(i.file.url, images_lookup[i.pk])
+            self.assertEqual(i.file.url, images_lookup[i.pk])  # file url == field url
 
         for path in (i.file.path for i in images_qs.iterator()):
-            # file exists and size > 0
-            self.assertTrue(os.path.isfile(path) and os.path.getsize(path))
+            self.assertTrue(os.path.isfile(path) and os.path.getsize(path))  # file exists and size > 0
 
     def check_texts(self, in_fields, out_fields):
         def get_texts(fields):
-            return sorted(
-                PosterSpec.walk_fields(fields, lambda t, n, p: p.get('text'))
-            )
+            return sorted(filter(None, (f.get('text') for f in fields.values())))
+
         self.assertEqual(get_texts(in_fields), get_texts(out_fields))
 
     def create_poster(self, fields):

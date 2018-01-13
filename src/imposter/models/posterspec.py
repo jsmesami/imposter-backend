@@ -28,15 +28,9 @@ class PosterSpec(TimeStampedModel):
 
     objects = models.Manager.from_queryset(EnabledQuerySet)()
 
-    FIELD_PARAMS = {
-        'text': {
-            'editable': {'text', 'fields'},
-            'mandatory': {'text'},
-        },
-        'image': {
-            'editable': {'filename', 'data', 'fields'},
-            'mandatory': {'filename', 'data'},
-        }
+    ALLOWED_FIELD_PARAMS = {
+        'text': {'text'},
+        'image': {'filename', 'data'},
     }
 
     @staticmethod
@@ -78,21 +72,6 @@ class PosterSpec(TimeStampedModel):
     @property
     def editable_fields(self):
         return self.get_editable_fields(self.fields)
-
-    @classmethod
-    def walk_fields(cls, fields, callback, parent_type=None):
-        """
-        For each field and subfield, yields results of callback(field_type, field_name, field_params) if not None
-        """
-        for field_name, field_params in fields.items():
-            field_type = field_params.get('type')
-            children = field_params.get('fields')
-            if children:
-                yield from cls.walk_fields(children, callback, parent_type=field_type)
-            else:
-                result = callback(parent_type or field_type, field_name, field_params)
-                if result is not None:
-                    yield result
 
     def save(self, **kwargs):
         from imposter.models.image import SpecImage

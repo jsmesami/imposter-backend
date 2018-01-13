@@ -78,16 +78,23 @@
       "y": 28,
       "color": "#000000"
     },
-    "partner_logos": {
-      "flow": "rl",
-      "spacing": 5,
+    "partner_logo_1": {
       "x": 150,
       "y": 12,
-      "w": {
-        "min": 20,
-        "max": 50
-      },
-      "h": 20
+      "w": 20,
+      "h": 30
+    },
+    "partner_logo_2": {
+      "x": 115,
+      "y": 12,
+      "w": 20,
+      "h": 30
+    },
+    "partner_logo_3": {
+      "x": 80,
+      "y": 12,
+      "w": 20,
+      "h": 30
     }
   },
 
@@ -161,10 +168,17 @@
       "name": "Cena akce",
       "mandatory": true
     },
-    "partner_logos": {
+    "partner_logo_1": {
       "type": "image",
-      "name": "Loga partnerů",
-      "fields": {}
+      "name": "Logo partnera 1"
+    },
+    "partner_logo_2": {
+      "type": "image",
+      "name": "Logo partnera 2"
+    },
+    "partner_logo_3": {
+      "type": "image",
+      "name": "Logo partnera 3"
     }
   }
 }

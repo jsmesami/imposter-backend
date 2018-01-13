@@ -124,26 +124,20 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 _('Missing required fields: {fields}').format(fields=', '.join(missing_required_fields))
             )
 
-        # Recursively check if new fields have valid parameters
-        def validate_params(fields, parent_type=None):
-            for field_name, field_params in fields.items():
-                field_type = spec_object.fields.get(field_name, {}).get('type')
-                children = field_params.get('fields')
-                if children:
-                    validate_params(children, parent_type=field_type)
-                else:
-                    self.field_params_validator(parent_type or field_type, field_name, field_params)
-
-        validate_params(new_fields)
+        # Check field parameters
+        for field_name, field_params in new_fields.items():
+            field_type = spec_object.fields.get(field_name, {}).get('type')
+            self.field_params_validator(field_type, field_name, field_params)
 
         return merged_fields
 
     @staticmethod
     def field_params_validator(field_type, field_name, field_params):
-        assert field_type in PosterSpec.FIELD_PARAMS.keys()
+        assert field_type in PosterSpec.ALLOWED_FIELD_PARAMS.keys()
 
-        editable_params = PosterSpec.FIELD_PARAMS[field_type]['editable']
-        disallowed_params = sorted(set(field_params.keys()) - editable_params)
+        allowed_params = PosterSpec.ALLOWED_FIELD_PARAMS[field_type]
+
+        disallowed_params = sorted(set(field_params.keys()) - allowed_params)
         if disallowed_params:
             raise ValidationError(_("Parameters not allowed for {type} field '{name}': {params}").format(
                 type=field_type,
@@ -151,8 +145,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 params=', '.join(disallowed_params),
             ))
 
-        mandatory_params = PosterSpec.FIELD_PARAMS[field_type]['mandatory']
-        missing_required_params = sorted(mandatory_params - set(field_params.keys()))
+        missing_required_params = sorted(allowed_params - set(field_params.keys()))
         if missing_required_params:
             raise ValidationError(_("Missing required parameters for {type} field '{name}': {params}").format(
                 type=field_type,
