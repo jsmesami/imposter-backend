@@ -20,8 +20,8 @@ from imposter.models.poster import Poster
 from utils.functional import deepmerge
 
 
-with open(os.path.join(settings.BASE_DIR, 'tests/data/small_image.jpg'), "rb") as image_file:
-    SMALL_IMAGE = str(base64.b64encode(image_file.read()))
+with open(os.path.join(settings.BASE_DIR, 'tests/data/small_image.jpg'), 'rb') as image_file:
+    SMALL_IMAGE = str(base64.b64encode(image_file.read()), encoding='ascii')
 
 
 CREATE_POSTER_FIELDS = {
