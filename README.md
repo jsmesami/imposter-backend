@@ -37,7 +37,7 @@ A standalone repository of Django backend API for ClojureScript
 
 ## License
 
-Copyright © 2017 Ondřej Nejedlý
+Copyright © 2018 Ondřej Nejedlý
 
 Distributed under the Eclipse Public License either version 1.0 or 
 (at your option) any later version.

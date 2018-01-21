@@ -92,7 +92,7 @@ class Image(TimeStampedModel):
     @classmethod
     def save_images_from_fields(cls, fields):
         """
-        Within fields, substitute base64-encoded images for urls to image files saved to disk.
+        Within fields, substitute base64-encoded images for urls of image files saved to disk.
         """
         from imposter.models.posterspec import PosterSpec  # local import because of cross-reference
 

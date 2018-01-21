@@ -116,7 +116,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
         # Check if all required fields are present
         missing_required_fields = sorted(
-            set(spec_object.mandatory_fields.keys()) -
+            set(spec_object.get_mandatory_fields(spec_object.editable_fields).keys()) -
             set(merged_fields.keys())
         )
         if missing_required_fields:
@@ -126,7 +126,7 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
 
         # Check field parameters
         for field_name, field_params in new_fields.items():
-            field_type = spec_object.fields.get(field_name, {}).get('type')
+            field_type = spec_object.editable_fields.get(field_name, {}).get('type')
             self.field_params_validator(field_type, field_name, field_params)
 
         return merged_fields

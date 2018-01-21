@@ -5,7 +5,7 @@ from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.files.base import ContentFile
 from django.db import models
 
-from imposter.generator import render_pdf, render_jpg
+from imposter.renderer import Renderer
 from imposter.models.bureau import Bureau
 from imposter.models.image import PosterImage
 from imposter.models.posterspec import PosterSpec
@@ -49,14 +49,17 @@ class Poster(TimeStampedModel):
 
     @property
     def title(self):
+        """
+        If fields contain a title, return it, else render something meaningful
+        """
         return (self.saved_fields.get('title', {}).get('text') or
                 "Poster {self.id} ({self.spec.name})".format(self=self))
 
     def save(self, **kwargs):
-        # Fields being saved need to be populated with data from spec, not present in request.
+        # Fields being saved need to be populated with data from spec (not present in request).
         populated_fields = deepmerge(
             self.saved_fields,
-            {k: v for (k, v) in self.spec.fields.items() if k in self.saved_fields}
+            {k: v for (k, v) in self.spec.editable_fields.items() if k in self.saved_fields},
         )
 
         self.saved_fields = PosterImage.save_images_from_fields(populated_fields)
@@ -64,10 +67,11 @@ class Poster(TimeStampedModel):
         # Save to get the poster ID
         super().save(**kwargs)
 
-        pdf = render_pdf()
+        renderer = Renderer(self.spec, self.saved_fields)
+        pdf = renderer.render_pdf()
         self.print = ContentFile(pdf, name='dummy.pdf')
 
-        thumb = render_jpg(pdf)
+        thumb = renderer.render_jpg(pdf)
         self.thumb = ContentFile(thumb, name='dummy.jpeg')
 
         super().save(force_update=True)
