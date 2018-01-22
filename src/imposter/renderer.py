@@ -1,8 +1,14 @@
 import io
 
-from reportlab.lib.colors import black
+from django.conf import settings
+
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+from reportlab.platypus.frames import Frame
+from reportlab.platypus.paragraph import Paragraph
 
 from imposter.models.image import PosterImage, SpecImage
 
@@ -10,15 +16,45 @@ __all__ = 'Renderer',
 
 
 class TextFrame:
-
     def __init__(self, **kwargs):
         self.params = kwargs
+        self.style = ParagraphStyle(
+            name='Normal',
+            fontName=settings.RENDERER['default_font_name'],
+            fontSize=settings.RENDERER['default_font_size'],
+            textColor=settings.RENDERER['default_text_color'],
+        )
 
     def draw(self, canvas):
         x = self.params['x'] * mm
         y = self.params['y'] * mm
+        w = self.params.get('w', 0) * mm
+        h = self.params.get('h', 0) * mm
+        align = self.params.get('align', 'left')
         text = self.params['text']
-        canvas.drawString(x, y, text)
+        color = self.params.get('color', settings.RENDERER['default_text_color'])
+        font_size = self.params.get('font_size', settings.RENDERER['default_font_size'])
+
+        canvas.setFont(settings.RENDERER['default_font_name'], font_size)
+        canvas.setFillColor(color)
+
+        if w and h:
+            self.draw_frame(canvas, x, y, w, h, text)
+        else:
+            self.draw_string(canvas, x, y, align, text)
+
+    def draw_string(self, canvas, x, y, align, text):
+        method = {
+            'left': canvas.drawString,
+            'center': canvas.drawCentredString,
+            'right': canvas.drawRightString,
+        }
+
+        method[align](x, y, text)
+
+    def draw_frame(self, canvas, x, y, w, h, text):
+        frame = Frame(x, y, w, h)
+        frame.addFromList([Paragraph(text, self.style)], canvas)
 
 
 class ImageFrame:
@@ -30,14 +66,19 @@ class ImageFrame:
     def draw(self, canvas):
         x = self.params['x'] * mm
         y = self.params['y'] * mm
-        color = self.params.get('color', black)
-        canvas.setFillColor(color)
-        canvas.drawImage(self.image.file.path, x, y)
+        w = self.params.get('w', 0) * mm
+        h = self.params.get('h', 0) * mm
+
+        if w and h:
+            canvas.drawImage(self.image.file.path, x, y, w, h, preserveAspectRatio=True)
+        else:
+            canvas.drawImage(self.image.file.path, x, y)
 
 
 class Renderer:
 
     def __init__(self, spec, saved_fields):
+        self.page_size = spec.w * mm, spec.h * mm
         self.elements = []
 
         def get_element(field_name, field_params, images_lookup):
@@ -61,8 +102,14 @@ class Renderer:
             self.elements.append(get_element(name, params, poster_images_lookup))
 
     def render_pdf(self):
+        default_font = settings.RENDERER.get('default_font_file')
+        if default_font:
+            pdfmetrics.registerFont(TTFont(settings.RENDERER['default_font_name'], default_font))
+
         with io.BytesIO() as buffer:
             c = canvas.Canvas(buffer)
+
+            c.setPageSize(self.page_size)
 
             for el in self.elements:
                 el.draw(c)
@@ -80,6 +127,6 @@ class Renderer:
             img.format = 'jpeg'
             img.background_color = Color('white')
             img.alpha_channel = 'remove'
-            img.transform(resize='640x480>')
+            img.transform(resize=settings.RENDERER['thumbnail_size'])
 
             return img.make_blob()

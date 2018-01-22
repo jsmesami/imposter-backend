@@ -110,3 +110,11 @@ THUMBNAIL_PREFIX = 'CACHE/thumbnails/'
 UPLOADED_FILE_MAX_SIZE = 3 * 1024 * 1024
 
 SUPPORTED_IMAGE_EXTENSIONS = '.jpeg', '.jpg', '.png'
+
+RENDERER = {
+    'default_font_name': 'LiberationSans',
+    'default_font_file': os.path.join(BASE_DIR, 'fonts', 'LiberationSans-Regular.ttf'),
+    'default_font_size': 16,
+    'default_text_color': '#000000',
+    'thumbnail_size': '640x480>',
+}
