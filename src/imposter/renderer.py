@@ -31,9 +31,9 @@ class TextFrame:
         w = self.params.get('w', 0) * mm
         h = self.params.get('h', 0) * mm
         align = self.params.get('align', 'left')
-        text = self.params['text']
         color = self.params.get('color', settings.RENDERER['default_text_color'])
         font_size = self.params.get('font_size', settings.RENDERER['default_font_size'])
+        text = self.change_case(self.params['text'], self.params.get('case', 'initial'))
 
         canvas.setFont(settings.RENDERER['default_font_name'], font_size)
         canvas.setFillColor(color)
@@ -43,18 +43,26 @@ class TextFrame:
         else:
             self.draw_string(canvas, x, y, align, text)
 
-    def draw_string(self, canvas, x, y, align, text):
+    def draw_string(self, canvas, x, y, alignment, text):
         method = {
             'left': canvas.drawString,
             'center': canvas.drawCentredString,
             'right': canvas.drawRightString,
         }
 
-        method[align](x, y, text)
+        method[alignment](x, y, text)
 
     def draw_frame(self, canvas, x, y, w, h, text):
         frame = Frame(x, y, w, h)
         frame.addFromList([Paragraph(text, self.style)], canvas)
+
+    def change_case(self, text, case):
+        method = {
+            'upper': lambda t: t.upper(),
+            'lower': lambda t: t.lower(),
+        }
+
+        return text if case == 'initial' else method[case](text)
 
 
 class ImageFrame:

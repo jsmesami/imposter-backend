@@ -34,7 +34,8 @@ Spec file is a JSON dictionary with following keys:
     "h": 200,            // Frame height in mm (optional/mandatory when width is specified).
     "font_size": 36,     // Font size (optional) in typographical points. Default is 16.
     "color": "#c4151c",  // Text color (optional). CSS-like HEX triplet, default is "#000000".
-    "align": "center"    // Text alignment (optional). Possible values are "center", "left", "right", default is "left",   
+    "align": "center",   // Text alignment (optional). Possible values are "center", "left", "right", default is "left".
+    "case": "upper"      // Text case (optional). Possible values are "upper", "lower", "initial", default is "initial".
   }
 }
 ```

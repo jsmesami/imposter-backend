@@ -44,7 +44,8 @@
       "x": 105,
       "y": 123.5,
       "color": "#c4151c",
-      "align": "center"
+      "align": "center",
+      "case": "upper"
     },
     "subtitle": {
       "font_size": 20,
