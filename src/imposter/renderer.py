@@ -23,6 +23,7 @@ class TextFrame:
             fontName=settings.RENDERER['default_font_name'],
             fontSize=settings.RENDERER['default_font_size'],
             textColor=settings.RENDERER['default_text_color'],
+            leading=settings.RENDERER['default_font_size'] * 1.2
         )
 
     def draw(self, canvas):
@@ -53,8 +54,8 @@ class TextFrame:
         method[alignment](x, y, text)
 
     def draw_frame(self, canvas, x, y, w, h, text):
-        frame = Frame(x, y, w, h)
-        frame.addFromList([Paragraph(text, self.style)], canvas)
+        frame = Frame(x, y, w, h, leftPadding=0, bottomPadding=0, rightPadding=0, topPadding=0)
+        frame.add(Paragraph(text, self.style), canvas)
 
     def change_case(self, text, case):
         method = {
