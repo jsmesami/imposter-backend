@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, unique=True)),
                 ('w', models.PositiveIntegerField()),
                 ('h', models.PositiveIntegerField()),
-                ('color', models.CharField(max_length=6)),
+                ('color', models.CharField(max_length=7)),
                 ('thumb', models.ImageField(upload_to='specs/thumbs')),
                 ('frames', django.contrib.postgres.fields.jsonb.JSONField()),
                 ('static_fields', django.contrib.postgres.fields.jsonb.JSONField()),

@@ -19,7 +19,7 @@ class PosterSpec(TimeStampedModel):
     name = models.CharField(max_length=255, unique=True)
     w = models.PositiveIntegerField()
     h = models.PositiveIntegerField()
-    color = models.CharField(max_length=6)  # Distinguishing color code
+    color = models.CharField(max_length=7)  # Distinguishing color code as a HEX triplet (eg. '#00FF00')
     thumb = models.ImageField(upload_to='specs/thumbs')
     frames = JSONField()
     static_fields = JSONField()
