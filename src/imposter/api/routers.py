@@ -6,5 +6,5 @@ router = routers.DefaultRouter()
 
 
 router.register(r'bureau', BureauViewSet)
-router.register(r'poster', PosterViewSet)
 router.register(r'spec', PosterSpecViewSet)
+router.register(r'poster', PosterViewSet)

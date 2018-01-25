@@ -40,7 +40,7 @@ class PosterViewSet(viewsets.ModelViewSet):
         if bureau:
             qs = qs.filter(bureau_id=bureau)
 
-        template = cast(self.request.query_params.get('template'), int)
+        template = cast(self.request.query_params.get('spec'), int)
         if template:
             qs = qs.filter(spec_id=template)
 

@@ -122,12 +122,20 @@ class TestApi(APITestCase):
 
     # Test resources listing
 
-    def test_spec_listing_success(self):
-        response = self.client.get(reverse('posterspec-list'))
+    def test_resources_listing_success(self):
+        response = self.client.get(reverse('api-root'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_bureau_listing_success(self):
         response = self.client.get(reverse('bureau-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_spec_listing_success(self):
+        response = self.client.get(reverse('posterspec-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_poster_listing_success(self):
+        response = self.client.get(reverse('poster-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Test poster CREATE
