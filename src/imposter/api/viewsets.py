@@ -1,13 +1,15 @@
+from dateutil.parser import parse
+
 from django.utils.translation import ugettext as _
 
 from rest_framework import permissions, response, status, viewsets
+from rest_framework.exceptions import ValidationError
 
 from imposter.api.permissions import IsObjectEditable
 from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterCreateUpdateSerializer
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
-from utils import cast
 
 
 class BureauViewSet(viewsets.ReadOnlyModelViewSet):
@@ -27,27 +29,51 @@ class PosterViewSet(viewsets.ModelViewSet):
     def filter_queryset(self, queryset):
 
         qs = super().filter_queryset(self.get_queryset())
+        filter_errors = []
 
         since = self.request.query_params.get('since')
         if since:
-            qs = qs.filter(created__gte=since)
+            try:
+                qs = qs.filter(created__gte=parse(since))
+            except ValueError:
+                filter_errors.append(_("Invalid date format of 'since': {val}").format(val=since))
 
         until = self.request.query_params.get('until')
         if until:
-            qs = qs.filter(created__lte=until)
+            try:
+                qs = qs.filter(created__lte=parse(until))
+            except ValueError:
+                filter_errors.append(_("Invalid date format of 'until': {val}").format(val=until))
 
-        bureau = cast(self.request.query_params.get('bureau'), int)
+        bureau = self.request.query_params.get('bureau')
         if bureau:
-            qs = qs.filter(bureau_id=bureau)
+            try:
+                qs = qs.filter(bureau_id=int(bureau))
+            except ValueError:
+                filter_errors.append(_("Invalid 'bureau' ID: {val}").format(val=bureau))
 
-        template = cast(self.request.query_params.get('spec'), int)
-        if template:
-            qs = qs.filter(spec_id=template)
+        spec = self.request.query_params.get('spec')
+        if spec:
+            try:
+                qs = qs.filter(spec_id=int(spec))
+            except ValueError:
+                filter_errors.append(_("Invalid 'spec' ID: {val}").format(val=spec))
 
-        limit = cast(self.request.query_params.get('limit'), int)
+        limit = self.request.query_params.get('limit')
+        offset = self.request.query_params.get('offset', 0)
         if limit:
-            offset = int(self.request.query_params.get('offset', 0))
-            qs = qs[offset:offset+limit]
+            try:
+                offset = int(offset)
+                limit = int(limit)
+                qs = qs[offset:offset+limit]
+            except ValueError:
+                filter_errors.append(_("Invalid paging. 'offset': {offset}, 'limit': {limit}").format(
+                    offset=offset,
+                    limit=limit,
+                ))
+
+        if filter_errors:
+            raise ValidationError(dict(filters=filter_errors))
 
         return qs
 

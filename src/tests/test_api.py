@@ -138,6 +138,26 @@ class TestApi(APITestCase):
         response = self.client.get(reverse('poster-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_poster_listing_with_filter_success(self):
+        query = '?bureau=1&spec=1&limit=1&offset=0&since={since}&until={until}'.format(
+            since=datetime.datetime.now() - datetime.timedelta(days=1),
+            until=datetime.datetime.now() + datetime.timedelta(days=1),
+        )
+        response = self.client.get(reverse('poster-list') + query)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_poster_listing_fails_with_wrong_filter(self):
+        query = '?bureau=x&spec=x&limit=x&offset=x&since=x&until=x'
+        response = self.client.get(reverse('poster-list') + query)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['filters'], [
+            "Invalid date format of 'since': x",
+            "Invalid date format of 'until': x",
+            "Invalid 'bureau' ID: x",
+            "Invalid 'spec' ID: x",
+            "Invalid paging. 'offset': x, 'limit': x"
+        ])
+
     # Test poster CREATE
 
     def test_poster_create_success(self):
