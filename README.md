@@ -10,7 +10,7 @@ Municipal Library of Prague.
 A standalone repository of Django backend API for ClojureScript
 [frontend](https://github.com/jsmesami/imposter-frontend). 
 
-## Development
+## Deployment and development
 
 ### Prequisities
 
@@ -30,6 +30,15 @@ A standalone repository of Django backend API for ClojureScript
     
     # run installation
     make install
+
+### Running the server
+
+Project includes [Chaussette](https://chaussette.readthedocs.io/) as a WSGI server 
+and [Circus](https://circus.readthedocs.io/) as supervisor. 
+
+    make run
+    make restart
+    make stop 
 
 ### Testing
 

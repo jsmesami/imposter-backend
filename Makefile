@@ -31,4 +31,13 @@ install: clean
 	make compilemessages
 
 test:
-	  $(MANAGE) test
+	$(MANAGE) test
+
+start:
+	$(PYTHON) $(VENV)/bin/circusd --daemon circus.ini
+
+stop:
+	$(PYTHON) $(VENV)/bin/circusctl quit
+
+restart:
+	$(PYTHON) $(VENV)/bin/circusctl restart
