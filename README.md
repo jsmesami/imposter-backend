@@ -35,6 +35,11 @@ A standalone repository of Django backend API for ClojureScript
 
     make test
 
+## Documentation
+
+API is documented [here](API.apib) or can be browsed at [Apiary](https://imposterapi.docs.apiary.io/).
+Poster specification format is described [here](SPEC.md).
+
 ## License
 
 Copyright © 2018 Ondřej Nejedlý
