@@ -2,8 +2,10 @@ from dateutil.parser import parse
 
 from django.utils.translation import ugettext as _
 
-from rest_framework import permissions, response, status, viewsets
+from rest_framework import permissions, response, status, viewsets, generics
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from imposter.api.permissions import IsObjectEditable
 from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterCreateUpdateSerializer
@@ -12,17 +14,30 @@ from imposter.models.poster import Poster
 from imposter.models.posterspec import PosterSpec
 
 
+class APIRootView(generics.RetrieveAPIView):
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response({
+            'bureau': reverse('bureau-list'),
+            'spec': reverse('posterspec-list'),
+            'poster': reverse('poster-list'),
+        })
+
+
 class BureauViewSet(viewsets.ReadOnlyModelViewSet):
+
     queryset = Bureau.objects.enabled()
     serializer_class = BureauSerializer
 
 
 class PosterSpecViewSet(viewsets.ReadOnlyModelViewSet):
+
     queryset = PosterSpec.objects.enabled()
     serializer_class = SpecSerializer
 
 
 class PosterViewSet(viewsets.ModelViewSet):
+
     queryset = Poster.objects.select_related('bureau', 'spec')
     permission_classes = IsObjectEditable,
 

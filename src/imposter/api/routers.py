@@ -1,8 +1,8 @@
 from rest_framework import routers
 
-from imposter.api.viewsets import BureauViewSet, PosterSpecViewSet, PosterViewSet
+from imposter.api.views import BureauViewSet, PosterSpecViewSet, PosterViewSet
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 
 
 router.register(r'bureau', BureauViewSet)
