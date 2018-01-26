@@ -28,7 +28,7 @@ class Poster(TimeStampedModel):
                 id=self.id,
                 bureau=self.bureau,
                 title=self.title,
-                created='{d:02d}{m:02d}{y}'.format(
+                created='{y}{m:02d}{d:02d}'.format(
                     d=self.created.day,
                     m=self.created.month,
                     y=str(self.created.year)[-2:],
@@ -50,7 +50,7 @@ class Poster(TimeStampedModel):
     @property
     def title(self):
         """
-        If fields contain a title, return it, else render something meaningful
+        If fields contain a title, return it, else render something meaningful.
         """
         return (self.saved_fields.get('title', {}).get('text') or
                 "Poster {self.id} ({self.spec.name})".format(self=self))

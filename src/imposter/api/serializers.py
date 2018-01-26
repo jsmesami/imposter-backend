@@ -38,6 +38,7 @@ class SpecSerializer(serializers.ModelSerializer):
 
 class PosterSerializer(serializers.ModelSerializer):
 
+    editable = serializers.ReadOnlyField()
     bureau = BureauSerializer(read_only=True)
     spec = SpecListSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
@@ -56,6 +57,9 @@ class PosterSerializer(serializers.ModelSerializer):
 
 
 def handles_exceptions(*exceptions, msg):
+    """
+    Class decorator converting an exception thrown within `create` or `update` methods into `ValidationError`.
+    """
     def wrapper(cls):
 
         class FieldsError(ValidationError):
@@ -82,11 +86,10 @@ def handles_exceptions(*exceptions, msg):
 
 
 @handles_exceptions(ImageError, msg=_('Incorrect image. {detail}'))
-class PosterCreateUpdateSerializer(serializers.ModelSerializer):
+class PosterCreateUpdateSerializer(PosterSerializer):
 
     bureau = serializers.PrimaryKeyRelatedField(queryset=Bureau.objects.enabled())
     spec = serializers.PrimaryKeyRelatedField(queryset=PosterSpec.objects.enabled())
-    fields = serializers.JSONField(source='saved_fields')
 
     def update(self, instance, validated_data):
         if 'spec' in validated_data:
@@ -152,7 +155,3 @@ class PosterCreateUpdateSerializer(serializers.ModelSerializer):
                 name=field_name,
                 params=', '.join(missing_required_params),
             ))
-
-    class Meta:
-        model = Poster
-        fields = 'id bureau spec fields'.split()

@@ -108,6 +108,13 @@ class TestApi(APITestCase):
 
         self.assertEqual(get_texts(in_fields), get_texts(out_fields))
 
+    def check_poster_files(self, data):
+        poster = Poster.objects.get(pk=data['id'])
+        self.assertEqual(data['thumb'], poster.thumb.url)
+        self.assertTrue(os.path.isfile(poster.thumb.path) and os.path.getsize(poster.thumb.path))
+        self.assertEqual(data['print'], poster.print.url)
+        self.assertTrue(os.path.isfile(poster.print.path) and os.path.getsize(poster.print.path))
+
     def create_poster(self, fields):
         return self.client.post(reverse('poster-list'), data=dict(bureau=1, spec=1, fields=fields))
 
@@ -167,6 +174,7 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images(fields)
         self.check_texts(CREATE_POSTER_FIELDS, fields)
+        self.check_poster_files(response.data)
 
     def test_poster_create_fails_with_disallowed_fields(self):
         disallowed_fields = {
@@ -211,6 +219,7 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images(fields)
         self.check_texts(CREATE_POSTER_FIELDS, fields)
+        self.check_poster_files(response.data)
 
     # Test poster UPDATE
 
@@ -221,6 +230,7 @@ class TestApi(APITestCase):
         fields = response.data['fields']
         self.check_images(fields)
         self.check_texts(deepmerge(UPDATE_POSTER_FIELDS, CREATE_POSTER_FIELDS), fields)
+        self.check_poster_files(response.data)
 
     def test_poster_update_fails_for_corrupted_image_data(self):
         corrupted_image = {
