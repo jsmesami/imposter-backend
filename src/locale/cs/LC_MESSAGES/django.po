@@ -62,11 +62,6 @@ msgstr "Chybné ID 'bureau': {val}"
 msgid "Invalid 'spec' ID: {val}"
 msgstr "Chybné ID 'spec': {val}"
 
-#: imposter/api/viewsets.py:70
-#, python-brace-format
-msgid "Invalid paging. 'offset': {offset}, 'limit': {limit}"
-msgstr "Chybné stránkování. 'offset': {offset}, 'limit': {limit}"
-
 #: imposter/api/viewsets.py:84
 msgid "Successfully deleted."
 msgstr "Úspěšně smazáno."

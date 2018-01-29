@@ -18,7 +18,11 @@ FORMAT: 1A
 
 Bureau API endpoint. Only allows listing.
 
-### Bureau collection [/bureau/]
+### Bureau collection [/bureau/{?limit,offset}]
+
++ Parameters
+    + limit: 10 (optional, number) - Paging limit
+    + offset: 0 (optional, number) - Paging offset
 
 #### List all bureaus [GET]
 
@@ -61,7 +65,11 @@ Bureau API endpoint. Only allows listing.
 
 Spec API endpoint. Only allows listing.
 
-### Spec collection [/spec/]
+### Spec collection [/spec/{?limit,offset}]
+
++ Parameters
+    + limit: 10 (optional, number) - Paging limit
+    + offset: 0 (optional, number) - Paging offset
 
 #### List all specs [GET]
 

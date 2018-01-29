@@ -74,19 +74,6 @@ class PosterViewSet(viewsets.ModelViewSet):
             except ValueError:
                 filter_errors.append(_("Invalid 'spec' ID: {val}").format(val=spec))
 
-        limit = self.request.query_params.get('limit')
-        offset = self.request.query_params.get('offset', 0)
-        if limit:
-            try:
-                offset = int(offset)
-                limit = int(limit)
-                qs = qs[offset:offset+limit]
-            except ValueError:
-                filter_errors.append(_("Invalid paging. 'offset': {offset}, 'limit': {limit}").format(
-                    offset=offset,
-                    limit=limit,
-                ))
-
         if filter_errors:
             raise ValidationError(dict(filters=filter_errors))
 

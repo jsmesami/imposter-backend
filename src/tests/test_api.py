@@ -154,7 +154,7 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_poster_listing_fails_with_wrong_filter(self):
-        query = '?bureau=x&spec=x&limit=x&offset=x&since=x&until=x'
+        query = '?bureau=x&spec=x&since=x&until=x'
         response = self.client.get(reverse('poster-list') + query)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['filters'], [
@@ -162,7 +162,6 @@ class TestApi(APITestCase):
             "Invalid date format of 'until': x",
             "Invalid 'bureau' ID: x",
             "Invalid 'spec' ID: x",
-            "Invalid paging. 'offset': x, 'limit': x"
         ])
 
     # Test poster CREATE
