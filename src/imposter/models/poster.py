@@ -75,3 +75,6 @@ class Poster(TimeStampedModel):
         self.thumb = ContentFile(thumb, name='dummy.jpeg')
 
         super().save(force_update=True)
+
+    class Meta:
+        ordering = '-modified',

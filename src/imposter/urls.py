@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 
 from imposter.api import views
 from imposter.api.routers import router
@@ -9,4 +11,4 @@ urlpatterns = [
     # because we don't want domain in endpoint urls.
     url(r'^api/$', views.APIRootView.as_view(), name='api-root'),
     url(r'^api/', include(router.urls)),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
