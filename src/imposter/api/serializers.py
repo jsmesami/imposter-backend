@@ -17,30 +17,24 @@ class BureauSerializer(serializers.ModelSerializer):
         fields = 'id name abbrev address'.split()
 
 
-class SpecListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PosterSpec
-        fields = 'id name color'.split()
-
-
 class SpecSerializer(serializers.ModelSerializer):
 
     thumb = serializers.SerializerMethodField()
+    fields = serializers.JSONField(source='editable_fields')
 
     def get_thumb(self, instance):
         return instance.thumb.url
 
     class Meta:
         model = PosterSpec
-        fields = 'id name color thumb editable_fields'.split()
+        fields = 'id name color thumb fields'.split()
 
 
 class PosterSerializer(serializers.ModelSerializer):
 
     editable = serializers.ReadOnlyField()
     bureau = BureauSerializer(read_only=True)
-    spec = SpecListSerializer(read_only=True)
+    spec = SpecSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
     print = serializers.SerializerMethodField()
     fields = serializers.JSONField(source='saved_fields')

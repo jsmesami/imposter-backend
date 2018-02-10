@@ -81,7 +81,7 @@ Spec API endpoint. Only allows listing.
                 "name": "Obecn\u00fd let\u00e1k 1",
                 "color": "#41B2CC",
                 "thumb": "/media/specs/thumbs/obecny-letak-1-thumb.jpg",
-                "editable_fields": {
+                "fields": {
                     "title": {
                         "name": "Titul",
                         "type": "text",
@@ -176,7 +176,66 @@ Poster API endpoint. Allows CRUD.
                 "spec": {
                     "id": 1,
                     "name": "Obecn\u00fd let\u00e1k 1",
-                    "color": "#41B2CC"
+                    "color": "#41B2CC",
+                    "thumb": "/media/specs/thumbs/obecny-letak-1-thumb.jpg",
+                    "fields": {
+                        "title": {
+                            "name": "Titul",
+                            "type": "text",
+                            "mandatory": true,
+                            "char_limit": 20
+                        },
+                        "summary": {
+                            "name": "Anotace",
+                            "type": "text",
+                            "mandatory": true,
+                            "char_limit": 300
+                        },
+                        "addendum": {
+                            "name": "Dodate\u010dn\u00fd text",
+                            "type": "text",
+                            "char_limit": 75
+                        },
+                        "subtitle": {
+                            "name": "Podtitul",
+                            "type": "text",
+                            "char_limit": 50
+                        },
+                        "event_date": {
+                            "name": "Datum kon\u00e1n\u00ed akce",
+                            "type": "text",
+                            "mandatory": true
+                        },
+                        "main_image": {
+                            "name": "Hlavn\u00ed obr\u00e1zek",
+                            "type": "image",
+                            "width": 186,
+                            "height": 106,
+                            "mandatory": true
+                        },
+                        "event_price": {
+                            "name": "Cena akce",
+                            "type": "text",
+                            "mandatory": true
+                        },
+                        "bureau_address": {
+                            "name": "Adresa pobo\u010dky",
+                            "type": "text",
+                            "mandatory": true
+                        },
+                        "partner_logo_1": {
+                            "name": "Logo partnera 1",
+                            "type": "image"
+                        },
+                        "partner_logo_2": {
+                            "name": "Logo partnera 2",
+                            "type": "image"
+                        },
+                        "partner_logo_3": {
+                            "name": "Logo partnera 3",
+                            "type": "image"
+                        }
+                    }
                 },
                 "fields": {
                     "title": {
@@ -358,7 +417,66 @@ Poster API endpoint. Allows CRUD.
             "spec": {
                 "id": 1,
                 "name": "Obecn\u00fd let\u00e1k 1",
-                "color": "#41B2CC"
+                "color": "#41B2CC",
+                "thumb": "/media/specs/thumbs/obecny-letak-1-thumb.jpg",
+                "fields": {
+                    "title": {
+                        "name": "Titul",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 20
+                    },
+                    "summary": {
+                        "name": "Anotace",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 300
+                    },
+                    "addendum": {
+                        "name": "Dodate\u010dn\u00fd text",
+                        "type": "text",
+                        "char_limit": 75
+                    },
+                    "subtitle": {
+                        "name": "Podtitul",
+                        "type": "text",
+                        "char_limit": 50
+                    },
+                    "event_date": {
+                        "name": "Datum kon\u00e1n\u00ed akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "main_image": {
+                        "name": "Hlavn\u00ed obr\u00e1zek",
+                        "type": "image",
+                        "width": 186,
+                        "height": 106,
+                        "mandatory": true
+                    },
+                    "event_price": {
+                        "name": "Cena akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "bureau_address": {
+                        "name": "Adresa pobo\u010dky",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "partner_logo_1": {
+                        "name": "Logo partnera 1",
+                        "type": "image"
+                    },
+                    "partner_logo_2": {
+                        "name": "Logo partnera 2",
+                        "type": "image"
+                    },
+                    "partner_logo_3": {
+                        "name": "Logo partnera 3",
+                        "type": "image"
+                    }
+                }
             },
             "fields": {
                 "title": {
