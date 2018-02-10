@@ -157,6 +157,7 @@
       "type": "text",
       "name": "Anotace",
       "order": 5,
+      "widget": "textarea",
       "char_limit": 300,
       "mandatory": true
     },
@@ -170,6 +171,7 @@
       "type": "text",
       "name": "Dodatečný text",
       "order": 7,
+      "widget": "textarea",
       "char_limit": 75
     },
     "event_price": {
