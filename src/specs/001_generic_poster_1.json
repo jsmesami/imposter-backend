@@ -129,11 +129,13 @@
     "bureau_address": {
       "type": "text",
       "name": "Adresa pobočky",
+      "order": 1,
       "mandatory": true
     },
     "main_image": {
       "type": "image",
       "name": "Hlavní obrázek",
+      "order": 2,
       "width": 186,
       "height": 106,
       "mandatory": true
@@ -141,46 +143,55 @@
     "title": {
       "type": "text",
       "name": "Titul",
+      "order": 3,
       "char_limit": 20,
       "mandatory": true
     },
     "subtitle": {
       "type": "text",
       "name": "Podtitul",
+      "order": 4,
       "char_limit": 50
     },
     "summary": {
       "type": "text",
       "name": "Anotace",
+      "order": 5,
       "char_limit": 300,
       "mandatory": true
     },
     "event_date": {
       "type": "text",
       "name": "Datum konání akce",
+      "order": 6,
       "mandatory": true
     },
     "addendum": {
       "type": "text",
       "name": "Dodatečný text",
+      "order": 7,
       "char_limit": 75
     },
     "event_price": {
       "type": "text",
       "name": "Cena akce",
+      "order": 8,
       "mandatory": true
     },
     "partner_logo_1": {
       "type": "image",
-      "name": "Logo partnera 1"
+      "name": "Logo partnera 1",
+      "order": 9
     },
     "partner_logo_2": {
       "type": "image",
-      "name": "Logo partnera 2"
+      "name": "Logo partnera 2",
+      "order": 10
     },
     "partner_logo_3": {
       "type": "image",
-      "name": "Logo partnera 3"
+      "name": "Logo partnera 3",
+      "order": 11
     }
   }
 }
