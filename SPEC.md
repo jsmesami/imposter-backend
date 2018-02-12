@@ -90,6 +90,8 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
     "type": "text",                // Type of the field (mandatory).
     "name": "a descriptive name",  // Field name (mandatory). The name is important for frontend UI. 
     "char_limit": 20,              // Character limit (optional). Used by frontend UI.
+    "order": 1,                    // Order of the field within the frontend UI (optional). 
+    "widget": "textarea",          // Input widget the FE should use (optional). "input" (default) or "textarea".
     "mandatory": true              // If the field must be filled. Default is false.
   }
 }
@@ -104,6 +106,7 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
     "name": "Hlavní obrázek",  // Field name (mandatory). Used by frontend UI.
     "width": 100,              // Image width (optional). Used by frontend UI for prescaling.
     "height": 200,             // Image height (optional/mandatory when width is specified).
+    "order": 2,                // Order of the field within the frontend UI (optional). 
     "mandatory": true          // If the field must be filled. Default is false.
   }
 }
