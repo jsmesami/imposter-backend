@@ -10,14 +10,15 @@ from imposter.models.posterspec import PosterSpec
 
 class Command(BaseCommand):
 
-    def handle(self, *args, **options):
-        specs_path = os.path.join(settings.BASE_DIR, 'specs')
+    PATH = os.path.join(settings.BASE_DIR, 'specs')
+    help = "Populates database with specs from within {path} directory.".format(path=PATH)
 
-        for f in (entry.path for entry in os.scandir(specs_path) if entry.is_file()):
+    def handle(self, *args, **options):
+        for f in (entry.path for entry in os.scandir(self.PATH) if entry.is_file()):
             with open(f) as specs_file:
                 data = json.load(specs_file)
 
                 spec_name = data['name']
                 spec_instance, created = PosterSpec.objects.get_or_create(name=spec_name, defaults=data)
 
-                print(("Spec '{}' created" if created else "Spec '{}' exists, skipped.").format(spec_name))
+                print(("Spec '{name}' created" if created else "Spec '{name}' exists, skipped.").format(name=spec_name))
