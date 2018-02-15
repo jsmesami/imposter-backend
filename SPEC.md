@@ -2,6 +2,7 @@
 
 Poster spec is a file that describes parameters of a poster, namely placement and dimensions 
 of various poster elements, thus serves as sort of a template for poster creation.
+Also provides hints for frontend form rendering.
 
 ## Files Location
 
@@ -92,7 +93,8 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
     "char_limit": 20,              // Character limit (optional). Used by frontend UI.
     "order": 1,                    // Order of the field within the frontend UI (optional). 
     "widget": "textarea",          // Input widget the FE should use (optional). "input" (default) or "textarea".
-    "mandatory": true              // If the field must be filled. Default is false.
+    "hidden": true,                // If the field is hidden on the FE (optional). Default is false.
+    "mandatory": true              // If the field must be filled (optional). Default is false.
   }
 }
 ```
@@ -107,7 +109,7 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
     "width": 100,              // Image width (optional). Used by frontend UI for prescaling.
     "height": 200,             // Image height (optional/mandatory when width is specified).
     "order": 2,                // Order of the field within the frontend UI (optional). 
-    "mandatory": true          // If the field must be filled. Default is false.
+    "mandatory": true          // If the field must be filled (optional). Default is false.
   }
 }
 ```

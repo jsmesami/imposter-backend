@@ -130,6 +130,7 @@
       "type": "text",
       "name": "Adresa pobočky",
       "order": 1,
+      "hidden": true,
       "mandatory": true
     },
     "main_image": {
