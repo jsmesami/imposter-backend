@@ -179,6 +179,7 @@
       "type": "text",
       "name": "Cena akce",
       "order": 8,
+      "char_limit": 30,
       "mandatory": true
     },
     "partner_logo_1": {

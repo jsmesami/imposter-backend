@@ -269,11 +269,6 @@ class TestApi(APITestCase):
         response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_poster_update_fails_trying_to_change_spec(self):
-        response = self.client.patch(reverse('poster-detail', args=[self.poster.pk]), data=dict(spec=1))
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.data['spec'], ["Poster specification can't be changed."])
-
     # Test poster DELETE
 
     def test_poster_delete_success(self):

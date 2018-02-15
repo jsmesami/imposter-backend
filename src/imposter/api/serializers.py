@@ -86,7 +86,9 @@ class PosterCreateUpdateSerializer(PosterSerializer):
     spec = serializers.PrimaryKeyRelatedField(queryset=PosterSpec.objects.enabled())
 
     def update(self, instance, validated_data):
-        if 'spec' in validated_data:
+        spec_object = validated_data.get('spec')
+
+        if spec_object and spec_object.id != instance.spec_id:
             raise serializers.ValidationError({
                 'spec': [_("Poster specification can't be changed.")],
             })
