@@ -1,6 +1,10 @@
 import io
+import math
+import os
 
 from django.conf import settings
+
+from PIL import Image
 
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
@@ -77,11 +81,52 @@ class ImageFrame:
         y = self.params['y'] * mm
         w = self.params.get('w', 0) * mm
         h = self.params.get('h', 0) * mm
+        scaling_method = self.params.get('scale')
 
         if w and h:
-            canvas.drawImage(self.image.file.path, x, y, w, h, preserveAspectRatio=True)
+            path = self._scale(self.image.file.path, scaling_method, w, h)
+            canvas.drawImage(path, x, y, w, h, preserveAspectRatio=True)
         else:
             canvas.drawImage(self.image.file.path, x, y)
+
+    @classmethod
+    def _scale(cls, orig_path, method, w, h):
+        """
+        Scale an image to the aspect ratio specified, leave untouched if the original ratio almost equals.
+        """
+        img = Image.open(orig_path)
+
+        orig_w, orig_h = img.size
+        if math.isclose(orig_w / orig_h, w / h, abs_tol=0.06):
+            return orig_path
+
+        new_path, ext = os.path.splitext(orig_path)
+        new_path = '{path}_scaled{ext}'.format(path=new_path, ext=ext)
+
+        if method == 'crop':
+            cls._crop(img, w, h).save(new_path, img.format)
+            return new_path
+
+        return orig_path
+
+    @classmethod
+    def _crop(cls, img, w, h):
+        i_w, i_h = img.size
+        crop_w, crop_h = cls.fit_rectangle_into_container(w, h, i_w, i_h)
+        crop_x = (i_w - crop_w) / 2
+        crop_y = (i_h - crop_h) / 2
+        img = img.crop((crop_x, crop_y, crop_x + crop_w, crop_y + crop_h))
+        return img
+
+    @staticmethod
+    def fit_rectangle_into_container(rect_w, rect_h, cont_w, cont_h):
+        rect_ratio = cont_w / cont_h
+        cont_ratio = rect_w / rect_h
+        if cont_ratio >= rect_ratio:
+            scale_ratio = cont_w / rect_w
+        else:
+            scale_ratio = cont_h / rect_h
+        return rect_w * scale_ratio, rect_h * scale_ratio
 
 
 class Renderer:
