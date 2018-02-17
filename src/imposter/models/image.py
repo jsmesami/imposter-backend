@@ -5,6 +5,8 @@ import os
 from collections import defaultdict
 from uuid import uuid4
 
+from unidecode import unidecode
+
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import models
@@ -28,7 +30,7 @@ class Image(TimeStampedModel):
         return '{path}/{hash}_{filename}{extension}'.format(
             path=self.BASE_PATH,
             hash=uuid4().hex[:16],
-            filename=slugify(name),
+            filename=slugify(unidecode(name)),
             extension=extension,
         )
 

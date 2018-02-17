@@ -1,9 +1,12 @@
 import datetime
 import os
 
+from unidecode import unidecode
+
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.files.base import ContentFile
 from django.db import models
+from django.utils.text import slugify
 
 from imposter.renderer import Renderer
 from imposter.models.bureau import Bureau
@@ -27,7 +30,7 @@ class Poster(TimeStampedModel):
                 p=self,
                 id=self.id,
                 bureau=self.bureau,
-                title=self.title,
+                title=slugify(unidecode(self.title)),
                 created='{y}{m:02d}{d:02d}'.format(
                     d=self.created.day,
                     m=self.created.month,

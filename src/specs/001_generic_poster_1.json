@@ -160,7 +160,7 @@
       "name": "Anotace",
       "order": 5,
       "widget": "textarea",
-      "char_limit": 300,
+      "char_limit": 280,
       "mandatory": true
     },
     "event_date": {

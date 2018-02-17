@@ -2,6 +2,8 @@ import base64
 
 from collections import OrderedDict
 
+from unidecode import unidecode
+
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.files.base import ContentFile
 from django.db import models
@@ -48,7 +50,7 @@ class PosterSpec(TimeStampedModel):
     def save(self, **kwargs):
         from imposter.models.image import SpecImage
 
-        thumb_name = slugify(self.name)+'-thumb.jpg'
+        thumb_name = slugify(unidecode(self.name))+'-thumb.jpg'
         thumb_data = SpecImage.normalize_data(str(self.thumb), thumb_name)
         self.thumb = ContentFile(base64.b64decode(thumb_data), name=thumb_name)
 
