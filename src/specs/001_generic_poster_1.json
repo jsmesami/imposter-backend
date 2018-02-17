@@ -167,6 +167,7 @@
       "type": "text",
       "name": "Datum konání akce",
       "order": 6,
+      "char_limit": 35,
       "mandatory": true
     },
     "addendum": {
