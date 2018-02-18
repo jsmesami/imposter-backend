@@ -26,23 +26,25 @@ with open(os.path.join(settings.BASE_DIR, 'tests/data/small_image.jpg'), 'rb') a
 
 CREATE_POSTER_FIELDS = {
     'title': {
-        'text': 'title',
+        'text': 'Testovací poster',
     },
     'main_image': {
         'filename': 'main.jpeg',
         'data': SMALL_IMAGE,
     },
     'event_price': {
-        'text': 'price',
+        'text': 'Vstup volný',
     },
     'event_date': {
-        'text': 'date',
+        'text': 'Pondělí, 28. února, od 19 do 21 h',
     },
     'summary': {
-        'text': 'summary',
+        'text': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore '
+                'et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi '
+                'ut aliquip ex ea commodo consequat.',
     },
     'bureau_address': {
-        'text': 'address',
+        'text': 'Mariánské náměstí 98/1, Praha 1',
     },
     'partner_logo_1': {
         'filename': 'logo1.jpeg',
@@ -52,7 +54,7 @@ CREATE_POSTER_FIELDS = {
 
 UPDATE_POSTER_FIELDS = {
     'summary': {
-        'text': 'updated',
+        'text': 'Toto shrnutí bylo upraveno',
     },
     'partner_logo_1': {
         'filename': 'logo1_replaced.jpeg',
