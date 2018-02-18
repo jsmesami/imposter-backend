@@ -146,7 +146,7 @@
       "type": "text",
       "name": "Titul",
       "order": 3,
-      "char_limit": 20,
+      "char_limit": 22,
       "mandatory": true
     },
     "subtitle": {
@@ -167,7 +167,7 @@
       "type": "text",
       "name": "Datum konání akce",
       "order": 6,
-      "char_limit": 35,
+      "char_limit": 40,
       "mandatory": true
     },
     "addendum": {
