@@ -8,16 +8,16 @@ clean:
 	rm -rf $(VENV)
 
 makemessages:
-	 cd src; $(MANAGE) makemessages -l cs
+	cd src; $(MANAGE) makemessages -l cs
 
 compilemessages:
-	 cd src; $(MANAGE) compilemessages
+	cd src; $(MANAGE) compilemessages
 
 makemigrations:
 	$(MANAGE) makemigrations imposter
 
 migrate:
-	  $(MANAGE) migrate
+	$(MANAGE) migrate
 
 loaddata:
 	$(MANAGE) loaddata src/fixtures/bureau.json
