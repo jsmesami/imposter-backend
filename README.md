@@ -36,7 +36,7 @@ A standalone repository of Django backend API for ClojureScript
 Project includes [Chaussette](https://chaussette.readthedocs.io/) as a WSGI server 
 and [Circus](https://circus.readthedocs.io/) as supervisor. 
 
-    make run
+    make start
     make restart
     make stop 
 
