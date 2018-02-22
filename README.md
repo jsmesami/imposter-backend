@@ -46,8 +46,8 @@ and [Circus](https://circus.readthedocs.io/) as supervisor.
 
 ## Documentation
 
-API is documented [here](API.apib) or can be browsed at [Apiary](https://imposterapi.docs.apiary.io/).
-Poster specification format is described [here](SPEC.md).
+API is documented [here](docs/API.apib) or can be browsed at [Apiary](https://imposterapi.docs.apiary.io/).
+Poster specification format is described [here](docs/SPEC.md).
 
 ## License
 
