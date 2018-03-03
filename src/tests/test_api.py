@@ -5,7 +5,6 @@ import os
 import shutil
 
 import factory
-from freezegun import freeze_time
 
 from django.conf import settings
 from django.core.management import call_command
@@ -266,19 +265,9 @@ class TestApi(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['fields'], ['Incorrect image. Image exceeds maximum file size: main.jpg'])
 
-    @freeze_time(TOMORROW)
-    def test_poster_update_fails_because_its_another_day(self):
-        response = self.update_poster(self.poster.pk, UPDATE_POSTER_FIELDS)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
     # Test poster DELETE
 
     def test_poster_delete_success(self):
         response = self.delete_poster(self.poster.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['detail'], 'Successfully deleted.')
-
-    @freeze_time(TOMORROW)
-    def test_poster_delete_fails_because_its_another_day(self):
-        response = self.delete_poster(self.poster.pk)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
