@@ -137,6 +137,7 @@
     "main_image": {
       "type": "image",
       "name": "Hlavní obrázek",
+      "help_text": "Obrázek se ořízne, proto vkládejte šířkový formát.",
       "order": 2,
       "width": 186,
       "height": 106,
@@ -166,6 +167,7 @@
     "event_date": {
       "type": "text",
       "name": "Datum konání akce",
+      "help_text": "např. Úterý, 6. března, od 19.30 do 20.30",
       "order": 6,
       "char_limit": 40,
       "mandatory": true
@@ -180,6 +182,7 @@
     "event_price": {
       "type": "text",
       "name": "Cena akce",
+      "help_text": "např. Vstupné zdarma nebo Vstupné 20 Kč",
       "order": 8,
       "char_limit": 30,
       "mandatory": true

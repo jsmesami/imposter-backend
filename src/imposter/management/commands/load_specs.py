@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = "Populates database with specs from within {path} directory.".format(path=PATH)
 
     def handle(self, *args, **options):
-        for f in (entry.path for entry in os.scandir(self.PATH) if entry.is_file()):
+        for f in sorted(entry.path for entry in os.scandir(self.PATH) if entry.is_file()):
             with open(f) as specs_file:
                 data = json.load(specs_file)
 

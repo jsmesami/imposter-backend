@@ -81,15 +81,16 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
 }
 ```
 
-### `dynamic_fields`
+### `editable_fields`
 
-`dynamic_fields` key holds a dictionary of those elements to be populated through API.
+`editable_fields` key holds a dictionary of those elements to be populated through API.
 
 ```javascript
 {
   "text_frame_id_string": {
     "type": "text",                // Type of the field (mandatory).
     "name": "a descriptive name",  // Field name (mandatory). The name is important for frontend UI. 
+    "help_text": "a helpful text", // A help text to be displayed together with the field on the frontend (optional).
     "char_limit": 20,              // Character limit (optional). Used by frontend UI.
     "order": 1,                    // Order of the field within the frontend UI (optional). 
     "widget": "textarea",          // Input widget the FE should use (optional). "input" (default) or "textarea".
@@ -106,6 +107,7 @@ Each ID string must also be present in either `static_fields` or `dynamic_fields
   "image_frame_id_string": {
     "type": "image",           // Type of the field (mandatory).
     "name": "Hlavní obrázek",  // Field name (mandatory). Used by frontend UI.
+    "help_text": "a help",     // A help text to be displayed together with the field on the frontend (optional).
     "width": 100,              // Image width (optional). Used by frontend UI for prescaling.
     "height": 200,             // Image height (optional/mandatory when width is specified).
     "order": 2,                // Order of the field within the frontend UI (optional). 
