@@ -44,7 +44,7 @@
       "font_size": 36,
       "x": 105,
       "y": 123.5,
-      "color": "#c4151c",
+      "color": "#2323be",
       "align": "center",
       "case": "upper"
     },
@@ -52,7 +52,7 @@
       "font_size": 20,
       "x": 105,
       "y": 111,
-      "color": "#c4151c",
+      "color": "#2323be",
       "align": "center"
     },
     "summary": {
@@ -67,7 +67,7 @@
       "font_size": 30,
       "x": 105,
       "y": 58,
-      "color": "#c4151c",
+      "color": "#2323be",
       "align": "center"
     },
     "addendum": {
