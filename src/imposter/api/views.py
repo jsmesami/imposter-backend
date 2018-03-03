@@ -7,7 +7,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from imposter.api.permissions import IsObjectEditable
 from imposter.api.serializers import BureauSerializer, SpecSerializer, PosterSerializer, PosterCreateUpdateSerializer
 from imposter.models.bureau import Bureau
 from imposter.models.poster import Poster
@@ -39,7 +38,6 @@ class PosterSpecViewSet(viewsets.ReadOnlyModelViewSet):
 class PosterViewSet(viewsets.ModelViewSet):
 
     queryset = Poster.objects.select_related('bureau', 'spec')
-    permission_classes = IsObjectEditable,
 
     def filter_queryset(self, queryset):
 

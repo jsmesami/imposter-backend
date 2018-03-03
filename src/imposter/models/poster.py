@@ -1,4 +1,3 @@
-import datetime
 import os
 
 from unidecode import unidecode
@@ -42,13 +41,6 @@ class Poster(TimeStampedModel):
 
     thumb = models.ImageField(upload_to=_upload_to, editable=False)
     print = models.FileField(upload_to=_upload_to, editable=False)
-
-    @property
-    def editable(self):
-        """
-        Poster editability: poster is editable only the day it was created.
-        """
-        return datetime.datetime.today().date() == self.created.date()
 
     @property
     def title(self):

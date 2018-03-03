@@ -32,7 +32,6 @@ class SpecSerializer(serializers.ModelSerializer):
 
 class PosterSerializer(serializers.ModelSerializer):
 
-    editable = serializers.ReadOnlyField()
     bureau = BureauSerializer(read_only=True)
     spec = SpecSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
@@ -47,7 +46,7 @@ class PosterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poster
-        fields = 'id editable title thumb print bureau spec fields'.split()
+        fields = 'id title thumb print bureau spec fields'.split()
 
 
 def handles_exceptions(*exceptions, msg):
