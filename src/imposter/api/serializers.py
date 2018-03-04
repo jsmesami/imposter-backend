@@ -46,7 +46,7 @@ class PosterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poster
-        fields = 'id title thumb print bureau spec fields'.split()
+        fields = 'id modified title thumb print bureau spec fields'.split()
 
 
 def handles_exceptions(*exceptions, msg):

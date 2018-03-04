@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
     name='Imposter Backend',
     description='The backend part of automated poster generation system for Municipal Library of Prague',
-    version='1.0.1',
+    version='1.0.2',
     author='Ondřej Nejedlý',
     url='https://github.com/jsmesami/imposter-backend',
     license='EPL',
