@@ -20,7 +20,7 @@ msgstr "Chybný obrázek. {detail}"
 
 #: imposter/api/serializers.py:94
 msgid "Poster specification can't be changed."
-msgstr "Specifikaci plakátu nelze měnit."
+msgstr "Specifikaci letáku nelze měnit."
 
 #: imposter/api/serializers.py:114
 #, python-brace-format

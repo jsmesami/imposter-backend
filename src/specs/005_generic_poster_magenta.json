@@ -167,7 +167,7 @@
     "event_date": {
       "type": "text",
       "name": "Datum konání akce",
-      "help_text": "např. Úterý, 6. března, od 19.30 do 20.30",
+      "help_text": "např. Úterý 6. března od 19.30 do 20.30",
       "order": 6,
       "char_limit": 40,
       "mandatory": true
