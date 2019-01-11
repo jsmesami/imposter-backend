@@ -376,5 +376,122 @@
       "abbrev": "ZIZ",
       "address": "Husitská 110/70, Praha 3"
     }
+  },
+  {
+    "pk": 43,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Malešice",
+      "abbrev": "MAL",
+      "address": "Počernická 524/64, Praha 10"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Letná",
+      "abbrev": "LET",
+      "address": "Milady Horákové 387/56, Praha 7"
+    }
+  },
+  {
+    "pk": 45,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Jezerka",
+      "abbrev": "JEZ",
+      "address": "Nuselská 603/94, Praha 4"
+    }
+  },
+  {
+    "pk": 46,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (Divadelní oddělení)",
+      "abbrev": "UKDO",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 47,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (malý sál)",
+      "abbrev": "UKMS",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (velký sál)",
+      "abbrev": "UKVS",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 49,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (Dílna)",
+      "abbrev": "UKDI",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 50,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (klubovna)",
+      "abbrev": "UKKL",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 51,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (Hudební oddělení)",
+      "abbrev": "UKHO",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 52,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (Oddělení pro děti a mládež)",
+      "abbrev": "UKDM",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 53,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (čítárna časopisů)",
+      "abbrev": "UKCC",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 54,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (Pragensia)",
+      "abbrev": "UKPR",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
+  },
+  {
+    "pk": 54,
+    "model": "imposter.Bureau",
+    "fields": {
+      "name": "Ústřední knihovna (oválný stůl)",
+      "abbrev": "UKOS",
+      "address": "Mariánské náměstí 98/1, Praha 1"
+    }
   }
 ]
