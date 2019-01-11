@@ -11,3 +11,6 @@ class Bureau(models.Model):
     disabled = models.BooleanField(default=False)
 
     objects = models.Manager.from_queryset(EnabledQuerySet)()
+
+    class Meta:
+        ordering = 'name',
