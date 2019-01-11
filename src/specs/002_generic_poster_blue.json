@@ -184,8 +184,7 @@
       "name": "Cena akce",
       "help_text": "např. Vstupné zdarma nebo Vstupné 20 Kč",
       "order": 8,
-      "char_limit": 30,
-      "mandatory": true
+      "char_limit": 30
     },
     "partner_logo_1": {
       "type": "image",
