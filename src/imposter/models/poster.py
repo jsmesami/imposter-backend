@@ -2,6 +2,7 @@ import os
 
 from unidecode import unidecode
 
+from django.conf import settings
 from django.contrib.postgres.fields.jsonb import JSONField
 from django.core.files.base import ContentFile
 from django.db import models
@@ -40,7 +41,7 @@ class Poster(TimeStampedModel):
         )
 
     thumb = models.ImageField(upload_to=_upload_to, editable=False)
-    print = models.FileField(upload_to=_upload_to, editable=False)
+    print_pdf = models.FileField(upload_to=_upload_to, editable=False)
 
     @property
     def title(self):
@@ -64,9 +65,9 @@ class Poster(TimeStampedModel):
 
         renderer = Renderer(self.spec, self.saved_fields)
         pdf = renderer.render_pdf()
-        self.print = ContentFile(pdf, name='dummy.pdf')
+        self.print_pdf = ContentFile(pdf, name='dummy.pdf')
 
-        thumb = renderer.render_jpg(pdf)
+        thumb = renderer.render_jpg(pdf, settings.RENDERER['thumbnail_size'])
         self.thumb = ContentFile(thumb, name='dummy.jpeg')
 
         super().save(force_update=True)

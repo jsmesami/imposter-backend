@@ -173,7 +173,7 @@ class Renderer:
 
             return buffer.getvalue()
 
-    def render_jpg(self, pdf):
+    def render_jpg(self, pdf, size):
         from wand.image import Image
         from wand.color import Color
 
@@ -181,6 +181,6 @@ class Renderer:
             img.format = 'jpeg'
             img.background_color = Color('white')
             img.alpha_channel = 'remove'
-            img.transform(resize=settings.RENDERER['thumbnail_size'])
+            img.transform(resize=size)
 
             return img.make_blob()

@@ -35,18 +35,18 @@ class PosterSerializer(serializers.ModelSerializer):
     bureau = BureauSerializer(read_only=True)
     spec = SpecSerializer(read_only=True)
     thumb = serializers.SerializerMethodField()
-    print = serializers.SerializerMethodField()
+    print_pdf = serializers.SerializerMethodField()
     fields = serializers.JSONField(source='saved_fields')
 
     def get_thumb(self, instance):
         return instance.thumb.url
 
-    def get_print(self, instance):
-        return instance.print.url
+    def get_print_pdf(self, instance):
+        return instance.print_pdf.url
 
     class Meta:
         model = Poster
-        fields = 'id modified title thumb print bureau spec fields'.split()
+        fields = 'id modified title thumb print_pdf bureau spec fields'.split()
 
 
 def handles_exceptions(*exceptions, msg):

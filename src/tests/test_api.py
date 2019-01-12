@@ -113,8 +113,8 @@ class TestApi(APITestCase):
         poster = Poster.objects.get(pk=data['id'])
         self.assertEqual(data['thumb'], poster.thumb.url)
         self.assertTrue(os.path.isfile(poster.thumb.path) and os.path.getsize(poster.thumb.path))
-        self.assertEqual(data['print'], poster.print.url)
-        self.assertTrue(os.path.isfile(poster.print.path) and os.path.getsize(poster.print.path))
+        self.assertEqual(data['print_pdf'], poster.print_pdf.url)
+        self.assertTrue(os.path.isfile(poster.print_pdf.path) and os.path.getsize(poster.print_pdf.path))
 
     def create_poster(self, fields):
         return self.client.post(reverse('poster-list'), data=dict(bureau=1, spec=1, fields=fields))
