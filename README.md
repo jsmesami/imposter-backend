@@ -17,7 +17,7 @@ A standalone repository of Django backend API for ClojureScript
 * Python 3.5+
 * PostgreSQL 9 (only tested with 9.6)
 * Ghostscript
-* ImageMagick
+* Poppler
 
 ### Installation
 
@@ -38,7 +38,7 @@ and [Circus](https://circus.readthedocs.io/) as supervisor.
 
     make start
     make restart
-    make stop 
+    make stop
 
 ### Testing
 
@@ -51,7 +51,7 @@ Poster specification format is described [here](docs/SPEC.md).
 
 ## License
 
-Copyright © 2018 Ondřej Nejedlý
+Copyright © 2019 Ondřej Nejedlý
 
 Distributed under the Eclipse Public License either version 1.0 or 
 (at your option) any later version.

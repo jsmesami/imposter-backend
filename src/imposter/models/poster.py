@@ -1,4 +1,5 @@
 import os
+from functools import partial
 
 from unidecode import unidecode
 
@@ -22,11 +23,11 @@ class Poster(TimeStampedModel):
     spec = models.ForeignKey(PosterSpec, on_delete=models.CASCADE, related_name='posters')
     saved_fields = JSONField(editable=False)  # Fields from spec with saved values
 
-    def _upload_to(self, filename):
+    def _upload_to(self, filename, suffix):
         _, extension = os.path.splitext(filename)
 
         return 'posters/{filename}{extension}'.format(
-            filename='{id:05d}_{bureau.abbrev}_{title}_{created}'.format(
+            filename='{id:05d}_{bureau.abbrev}_{title}_{created}_{suffix}'.format(
                 p=self,
                 id=self.id,
                 bureau=self.bureau,
@@ -36,12 +37,14 @@ class Poster(TimeStampedModel):
                     m=self.created.month,
                     y=str(self.created.year)[-2:],
                 ),
+                suffix=suffix,
             ),
             extension=extension,
         )
 
-    thumb = models.ImageField(upload_to=_upload_to, editable=False)
-    print_pdf = models.FileField(upload_to=_upload_to, editable=False)
+    thumb = models.ImageField(upload_to=partial(_upload_to, suffix='THUMB'), editable=False)
+    print_pdf = models.FileField(upload_to=partial(_upload_to, suffix='PRINT'), editable=False)
+    print_jpg = models.FileField(upload_to=partial(_upload_to, suffix='PRINT'), editable=False, blank=True)
 
     @property
     def title(self):
@@ -67,7 +70,10 @@ class Poster(TimeStampedModel):
         pdf = renderer.render_pdf()
         self.print_pdf = ContentFile(pdf, name='dummy.pdf')
 
-        thumb = renderer.render_jpg(pdf, settings.RENDERER['thumbnail_size'])
+        jpg = renderer.render_jpg(pdf, **settings.RENDERER['jpg_print_params'])
+        self.print_jpg = ContentFile(jpg, name='dummy.jpeg')
+
+        thumb = renderer.render_jpg(pdf, **settings.RENDERER['jpg_thumb_params'])
         self.thumb = ContentFile(thumb, name='dummy.jpeg')
 
         super().save(force_update=True)

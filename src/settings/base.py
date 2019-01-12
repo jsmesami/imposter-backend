@@ -117,5 +117,6 @@ RENDERER = {
     'default_font_file': os.path.join(BASE_DIR, 'fonts', 'LiberationSans-Regular.ttf'),
     'default_font_size': 16,
     'default_text_color': '#000000',
-    'thumbnail_size': '640x480>',
+    'jpg_print_params': {'dpi': '200', 'quality': 90},
+    'jpg_thumb_params': {'dpi': '40', 'quality': 40}
 }

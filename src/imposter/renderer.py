@@ -5,6 +5,7 @@ import os
 from django.conf import settings
 
 from PIL import Image
+from pdf2image import convert_from_bytes
 
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
@@ -173,14 +174,8 @@ class Renderer:
 
             return buffer.getvalue()
 
-    def render_jpg(self, pdf, size):
-        from wand.image import Image
-        from wand.color import Color
-
-        with Image(blob=pdf, format='pdf') as img:
-            img.format = 'jpeg'
-            img.background_color = Color('white')
-            img.alpha_channel = 'remove'
-            img.transform(resize=size)
-
-            return img.make_blob()
+    def render_jpg(self, pdf, dpi, quality):
+        img = convert_from_bytes(pdf, dpi=dpi)[0]
+        with io.BytesIO() as buffer:
+            img.save(buffer, format='jpeg', quality=quality)
+            return buffer.getvalue()

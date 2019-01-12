@@ -16,4 +16,4 @@ addons:
   apt:
     packages:
       - ghostscript
-      - imagemagick
+      - poppler-utils
