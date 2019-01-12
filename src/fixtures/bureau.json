@@ -12,7 +12,7 @@
     "pk": 2,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Barrandov",
+      "name": "Pobočka Barrandov",
       "abbrev": "BAR",
       "address": "Wassermannova 926/16, Praha 5"
     }
@@ -21,7 +21,7 @@
     "pk": 3,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Bohnice",
+      "name": "Pobočka Bohnice",
       "abbrev": "BOH",
       "address": "Těšínská 600/4, Praha 8"
     }
@@ -30,7 +30,7 @@
     "pk": 4,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Břevnov",
+      "name": "Pobočka Břevnov",
       "abbrev": "BREV",
       "address": "Bělohorská 1666/56, Praha 6"
     }
@@ -39,7 +39,7 @@
     "pk": 5,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Cibulka",
+      "name": "Pobočka Cibulka",
       "abbrev": "CIB",
       "address": "Musílkova 335/62, Praha 5"
     }
@@ -48,7 +48,7 @@
     "pk": 6,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Černý Most",
+      "name": "Pobočka Černý Most",
       "abbrev": "CERM",
       "address": "Generála Janouška 1060/2, Praha 14"
     }
@@ -57,7 +57,7 @@
     "pk": 7,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Dědina",
+      "name": "Pobočka Dědina",
       "abbrev": "DED",
       "address": "Žukovského 888/2, Praha 6"
     }
@@ -66,7 +66,7 @@
     "pk": 8,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Dejvice",
+      "name": "Pobočka Dejvice",
       "abbrev": "DEJ",
       "address": "Technická 2710/6, Praha 6"
     }
@@ -75,7 +75,7 @@
     "pk": 9,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Dittrichova",
+      "name": "Pobočka Dittrichova",
       "abbrev": "DITT",
       "address": "Dittrichova 1543/2, Praha 2"
     }
@@ -84,7 +84,7 @@
     "pk": 10,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Dům čtení (Ruská)",
+      "name": "Pobočka Dům čtení (Ruská)",
       "abbrev": "RUS",
       "address": "Ruská 1455/192, Praha 10"
     }
@@ -93,7 +93,7 @@
     "pk": 11,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Hloubětín",
+      "name": "Pobočka Hloubětín",
       "abbrev": "HLOU",
       "address": "Poděbradská 489/4, Praha 14"
     }
@@ -102,7 +102,7 @@
     "pk": 12,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Hostivař",
+      "name": "Pobočka Hostivař",
       "abbrev": "HOST",
       "address": "Golfová 910/10, Praha 15"
     }
@@ -111,7 +111,7 @@
     "pk": 13,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Hradčany",
+      "name": "Pobočka Hradčany",
       "abbrev": "HRAD",
       "address": "Pohořelec 111/25, Praha 1"
     }
@@ -120,7 +120,7 @@
     "pk": 14,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Chodov",
+      "name": "Pobočka Chodov",
       "abbrev": "CHOD",
       "address": "Jírovcovo náměstí 1782/1, Praha 11"
     }
@@ -129,7 +129,7 @@
     "pk": 15,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Kobylisy",
+      "name": "Pobočka Kobylisy",
       "abbrev": "KOB",
       "address": "Klapkova 26/3, Praha 8"
     }
@@ -138,7 +138,7 @@
     "pk": 16,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Korunní",
+      "name": "Pobočka Korunní",
       "abbrev": "KOR",
       "address": "Korunní 2160/68, Praha 10"
     }
@@ -147,7 +147,7 @@
     "pk": 17,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Krč",
+      "name": "Pobočka Krč",
       "abbrev": "KRC",
       "address": "Štúrova 1282/12, Praha 4"
     }
@@ -156,7 +156,7 @@
     "pk": 18,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ládví",
+      "name": "Pobočka Ládví",
       "abbrev": "LAD",
       "address": "Burešova 1661/2, Praha 8"
     }
@@ -165,7 +165,7 @@
     "pk": 19,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Lužiny",
+      "name": "Pobočka Lužiny",
       "abbrev": "LUZ",
       "address": "Archeologická 2256/1, Praha 13"
     }
@@ -174,7 +174,7 @@
     "pk": 20,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Michle",
+      "name": "Pobočka Michle",
       "abbrev": "MICH",
       "address": "Michelská 7/1, Praha 4"
     }
@@ -183,7 +183,7 @@
     "pk": 21,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Modřany",
+      "name": "Pobočka Modřany",
       "abbrev": "MOD",
       "address": "Vazovova 3229/1, Praha 12"
     }
@@ -192,7 +192,7 @@
     "pk": 22,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Novodvorská",
+      "name": "Pobočka Novodvorská",
       "abbrev": "NOV",
       "address": "Novodvorská 1013/151, Praha 4"
     }
@@ -201,7 +201,7 @@
     "pk": 23,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Opatov",
+      "name": "Pobočka Opatov",
       "abbrev": "OPAT",
       "address": "Opatovská 1754/14, Praha 11"
     }
@@ -210,7 +210,7 @@
     "pk": 24,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ostrčilovo náměstí",
+      "name": "Pobočka Ostrčilovo náměstí",
       "abbrev": "OSTN",
       "address": "Ostrčilovo nám. 518/1, Praha 2"
     }
@@ -219,7 +219,7 @@
     "pk": 25,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ostrovského",
+      "name": "Pobočka Ostrovského",
       "abbrev": "OSTR",
       "address": "Na Skalce 972/29, Praha 5"
     }
@@ -228,7 +228,7 @@
     "pk": 26,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Pankrác",
+      "name": "Pobočka Pankrác",
       "abbrev": "PAN",
       "address": "Na Veselí 542/5, Praha 4"
     }
@@ -237,7 +237,7 @@
     "pk": 27,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Petřiny",
+      "name": "Pobočka Petřiny",
       "abbrev": "PETR",
       "address": "Mahulenina 31/17, Praha 6"
     }
@@ -246,7 +246,7 @@
     "pk": 28,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Prosek",
+      "name": "Pobočka Prosek",
       "abbrev": "PROS",
       "address": "Měšická 806/3, Praha 9"
     }
@@ -255,7 +255,7 @@
     "pk": 29,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Sedmička",
+      "name": "Pobočka Sedmička",
       "abbrev": "SEDM",
       "address": "Tusarova 429/35, Praha 7"
     }
@@ -264,7 +264,7 @@
     "pk": 30,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Skalka",
+      "name": "Pobočka Skalka",
       "abbrev": "SKAL",
       "address": "Rubensova 2237/2, Praha 10"
     }
@@ -273,7 +273,7 @@
     "pk": 31,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Smíchov",
+      "name": "Pobočka Smíchov",
       "abbrev": "SMI",
       "address": "Náměstí 14. října 83/15, Praha 5"
     }
@@ -282,7 +282,7 @@
     "pk": 32,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Spořilov",
+      "name": "Pobočka Spořilov",
       "abbrev": "SPOR",
       "address": "Postupická 2932/7, Praha 4"
     }
@@ -291,7 +291,7 @@
     "pk": 33,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Stodůlky",
+      "name": "Pobočka Stodůlky",
       "abbrev": "STOD",
       "address": "Kovářova 1615/4, Praha 13"
     }
@@ -300,7 +300,7 @@
     "pk": 34,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Školská",
+      "name": "Pobočka Školská",
       "abbrev": "SKOL",
       "address": "Školská 1267/30, Praha 1"
     }
@@ -309,7 +309,7 @@
     "pk": 35,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Velká Chuchle",
+      "name": "Pobočka Velká Chuchle",
       "abbrev": "VCH",
       "address": "Starochuchelská 20/7, Praha 16"
     }
@@ -318,7 +318,7 @@
     "pk": 36,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Vikova",
+      "name": "Pobočka Vikova",
       "abbrev": "VIK",
       "address": "Vikova 1223/4, Praha 4"
     }
@@ -327,7 +327,7 @@
     "pk": 37,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Vozovna",
+      "name": "Pobočka Vozovna",
       "abbrev": "VOZ",
       "address": "Za Žižkovskou vozovnou 2687/18, Praha 3"
     }
@@ -336,7 +336,7 @@
     "pk": 38,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Vysočany",
+      "name": "Pobočka Vysočany",
       "abbrev": "VYS",
       "address": "Zbuzkova 285/34, Praha 9"
     }
@@ -345,7 +345,7 @@
     "pk": 39,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Vzácné tisky",
+      "name": "Pobočka Vzácné tisky",
       "abbrev": "VZAC",
       "address": "U Brusnice 324/9, Praha 6 - Střešovice"
     }
@@ -354,7 +354,7 @@
     "pk": 40,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Zahradní Město",
+      "name": "Pobočka Zahradní Město",
       "abbrev": "ZAHM",
       "address": "Topolová 2961/12a, Praha 10"
     }
@@ -363,7 +363,7 @@
     "pk": 41,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Záhřebská",
+      "name": "Pobočka Záhřebská",
       "abbrev": "ZAHR",
       "address": "Záhřebská 158/20, Praha 2"
     }
@@ -372,7 +372,7 @@
     "pk": 42,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Žižkov",
+      "name": "Pobočka Žižkov",
       "abbrev": "ZIZ",
       "address": "Husitská 110/70, Praha 3"
     }
@@ -381,7 +381,7 @@
     "pk": 43,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Malešice",
+      "name": "Pobočka Malešice",
       "abbrev": "MAL",
       "address": "Počernická 524/64, Praha 10"
     }
@@ -390,7 +390,7 @@
     "pk": 44,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Letná",
+      "name": "Pobočka Letná",
       "abbrev": "LET",
       "address": "Milady Horákové 387/56, Praha 7"
     }
@@ -399,7 +399,7 @@
     "pk": 45,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Jezerka",
+      "name": "Pobočka Jezerka",
       "abbrev": "JEZ",
       "address": "Nuselská 603/94, Praha 4"
     }
@@ -408,90 +408,90 @@
     "pk": 46,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (Divadelní odd.)",
+      "name": "Ústřední knihovna (Divadelní oddělení)",
       "abbrev": "UKDO",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 47,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (malý sál)",
+      "name": "Ústřední knihovna (malý sál)",
       "abbrev": "UKMS",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 48,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (velký sál)",
+      "name": "Ústřední knihovna (velký sál)",
       "abbrev": "UKVS",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 49,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (Dílna)",
+      "name": "Ústřední knihovna (Dílna)",
       "abbrev": "UKDI",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 50,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (klubovna)",
+      "name": "Ústřední knihovna (klubovna)",
       "abbrev": "UKKL",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 51,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (Hudební odd.)",
+      "name": "Ústřední knihovna (Hudební oddělení)",
       "abbrev": "UKHO",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 52,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "ÚK (Odd. pro děti a mládež)",
+      "name": "Ústřední knihovna (Oddělení pro děti a mládež)",
       "abbrev": "UKDM",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 53,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (čítárna časopisů)",
+      "name": "Ústřední knihovna (čítárna časopisů)",
       "abbrev": "UKCC",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 54,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (Pragensia)",
+      "name": "Ústřední knihovna (Pragensia)",
       "abbrev": "UKPR",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   },
   {
     "pk": 54,
     "model": "imposter.Bureau",
     "fields": {
-      "name": "Ústřední (oválný stůl)",
+      "name": "Ústřední knihovna (oválný stůl)",
       "abbrev": "UKOS",
-      "address": "Mariánské náměstí 98/1, Praha 1"
+      "address": ""
     }
   }
 ]
