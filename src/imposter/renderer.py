@@ -1,6 +1,7 @@
 import io
 import math
 import os
+import re
 
 from django.conf import settings
 
@@ -21,6 +22,8 @@ __all__ = 'Renderer',
 
 
 class TextFrame:
+    _PREPOS_RE = re.compile(r'(?<= |\u00a0)([kosuvzia]) ', re.M | re.I | re.U)
+
     def __init__(self, **kwargs):
         self.params = kwargs
         self.style = ParagraphStyle(
@@ -45,7 +48,7 @@ class TextFrame:
         canvas.setFillColor(color)
 
         if w and h:
-            self.draw_frame(canvas, x, y, w, h, text)
+            self.draw_frame(canvas, x, y, w, h, self._PREPOS_RE.sub('\g<1>\u00a0', text))
         else:
             self.draw_string(canvas, x, y, align, text)
 
