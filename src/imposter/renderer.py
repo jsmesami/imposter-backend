@@ -48,7 +48,7 @@ class TextFrame:
         canvas.setFillColor(color)
 
         if w and h:
-            self.draw_frame(canvas, x, y, w, h, self._PREPOS_RE.sub('\g<1>\u00a0', text))  # pylint: disable=W605
+            self.draw_frame(canvas, x, y, w, h, self._PREPOS_RE.sub('\g<1>\u00a0', text))  # noqa pylint: disable=W605
         else:
             self.draw_string(canvas, x, y, align, text)
 
