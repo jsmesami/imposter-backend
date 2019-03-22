@@ -154,3 +154,12 @@ class PosterCreateUpdateSerializer(PosterSerializer):
                 name=field_name,
                 params=', '.join(missing_required_params),
             ))
+
+    def to_representation(self, instance):
+        default = super().to_representation(instance)
+
+        return {
+            **default,
+            'spec': SpecSerializer(instance=instance.spec).data,
+            'bureau': BureauSerializer(instance=instance.bureau).data,
+        }

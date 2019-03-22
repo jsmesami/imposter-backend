@@ -332,11 +332,132 @@ Poster API endpoint. Allows CRUD.
         {
             "id": 1,
             "title": "title",
-            "bureau": 1,
-            "spec": 1,
             "thumb": "/media/posters/00001_USTR_title_180125_THUMB.jpeg",
             "print_pdf": "/media/posters/00001_USTR_title_180125_PRINT.pdf",
             "print_jpg": "/media/posters/00001_USTR_title_180125_PRINT.jpeg",
+            "bureau": {
+                "id": 1,
+                "name": "\u00dast\u0159edn\u00ed knihovna",
+                "abbrev": "USTR",
+                "address": "Mari\u00e1nsk\u00e9 n\u00e1m\u011bst\u00ed 98/1, Praha 1"
+            },
+            "spec": {
+                "id": 1,
+                "name": "Obecn\u00fd let\u00e1k 1",
+                "color": "#41B2CC",
+                "thumb": "/media/specs/thumbs/obecny-letak-1-thumb.jpg",
+                "fields": {
+                    "title": {
+                        "name": "Titul",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 20
+                    },
+                    "summary": {
+                        "name": "Anotace",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 300
+                    },
+                    "addendum": {
+                        "name": "Dodate\u010dn\u00fd text",
+                        "type": "text",
+                        "char_limit": 75
+                    },
+                    "subtitle": {
+                        "name": "Podtitul",
+                        "type": "text",
+                        "char_limit": 50
+                    },
+                    "event_date": {
+                        "name": "Datum kon\u00e1n\u00ed akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "main_image": {
+                        "name": "Hlavn\u00ed obr\u00e1zek",
+                        "type": "image",
+                        "width": 186,
+                        "height": 106,
+                        "mandatory": true
+                    },
+                    "event_price": {
+                        "name": "Cena akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "bureau_address": {
+                        "name": "Adresa pobo\u010dky",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "partner_logo_1": {
+                        "name": "Logo partnera 1",
+                        "type": "image"
+                    },
+                    "partner_logo_2": {
+                        "name": "Logo partnera 2",
+                        "type": "image"
+                    },
+                    "partner_logo_3": {
+                        "name": "Logo partnera 3",
+                        "type": "image"
+                    }
+                }
+            },
+            "fields": {
+                "title": {
+                    "name": "Titul",
+                    "text": "title",
+                    "type": "text",
+                    "mandatory": true,
+                    "char_limit": 20
+                },
+                "summary": {
+                    "name": "Anotace",
+                    "text": "summary",
+                    "type": "text",
+                    "mandatory": true,
+                    "char_limit": 300
+                },
+                "event_date": {
+                    "name": "Datum kon\u00e1n\u00ed akce",
+                    "text": "date",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "main_image": {
+                    "id": 1,
+                    "url": "/media/posters/images/84216654a3d94465_main.jpeg",
+                    "data": null,
+                    "name": "Hlavn\u00ed obr\u00e1zek",
+                    "type": "image",
+                    "width": 186,
+                    "height": 106,
+                    "filename": null,
+                    "mandatory": true
+                },
+                "event_price": {
+                    "name": "Cena akce",
+                    "text": "price",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "bureau_address": {
+                    "name": "Adresa pobo\u010dky",
+                    "text": "address",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "partner_logo_1": {
+                    "id": 2,
+                    "url": "/media/posters/images/572403b51fd24b17_logo1.jpeg",
+                    "data": null,
+                    "name": "Logo partnera 1",
+                    "type": "image",
+                    "filename": null
+                }
+            },
             "fields": {
                 "title": {
                     "name": "Titul",
@@ -562,8 +683,129 @@ Poster API endpoint. Allows CRUD.
             "thumb": "/media/posters/00001_USTR_title_180125_THUMB.jpeg",
             "print_pdf": "/media/posters/00001_USTR_title_180125_PRINT.pdf",
             "print_jpg": "/media/posters/00001_USTR_title_180125_PRINT.jpeg",
-            "bureau": 1,
-            "spec": 1,
+            "bureau": {
+                "id": 1,
+                "name": "\u00dast\u0159edn\u00ed knihovna",
+                "abbrev": "USTR",
+                "address": "Mari\u00e1nsk\u00e9 n\u00e1m\u011bst\u00ed 98/1, Praha 1"
+            },
+            "spec": {
+                "id": 1,
+                "name": "Obecn\u00fd let\u00e1k 1",
+                "color": "#41B2CC",
+                "thumb": "/media/specs/thumbs/obecny-letak-1-thumb.jpg",
+                "fields": {
+                    "title": {
+                        "name": "Titul",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 20
+                    },
+                    "summary": {
+                        "name": "Anotace",
+                        "type": "text",
+                        "mandatory": true,
+                        "char_limit": 300
+                    },
+                    "addendum": {
+                        "name": "Dodate\u010dn\u00fd text",
+                        "type": "text",
+                        "char_limit": 75
+                    },
+                    "subtitle": {
+                        "name": "Podtitul",
+                        "type": "text",
+                        "char_limit": 50
+                    },
+                    "event_date": {
+                        "name": "Datum kon\u00e1n\u00ed akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "main_image": {
+                        "name": "Hlavn\u00ed obr\u00e1zek",
+                        "type": "image",
+                        "width": 186,
+                        "height": 106,
+                        "mandatory": true
+                    },
+                    "event_price": {
+                        "name": "Cena akce",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "bureau_address": {
+                        "name": "Adresa pobo\u010dky",
+                        "type": "text",
+                        "mandatory": true
+                    },
+                    "partner_logo_1": {
+                        "name": "Logo partnera 1",
+                        "type": "image"
+                    },
+                    "partner_logo_2": {
+                        "name": "Logo partnera 2",
+                        "type": "image"
+                    },
+                    "partner_logo_3": {
+                        "name": "Logo partnera 3",
+                        "type": "image"
+                    }
+                }
+            },
+            "fields": {
+                "title": {
+                    "name": "Titul",
+                    "text": "title",
+                    "type": "text",
+                    "mandatory": true,
+                    "char_limit": 20
+                },
+                "summary": {
+                    "name": "Anotace",
+                    "text": "summary",
+                    "type": "text",
+                    "mandatory": true,
+                    "char_limit": 300
+                },
+                "event_date": {
+                    "name": "Datum kon\u00e1n\u00ed akce",
+                    "text": "date",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "main_image": {
+                    "id": 1,
+                    "url": "/media/posters/images/84216654a3d94465_main.jpeg",
+                    "data": null,
+                    "name": "Hlavn\u00ed obr\u00e1zek",
+                    "type": "image",
+                    "width": 186,
+                    "height": 106,
+                    "filename": null,
+                    "mandatory": true
+                },
+                "event_price": {
+                    "name": "Cena akce",
+                    "text": "price",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "bureau_address": {
+                    "name": "Adresa pobo\u010dky",
+                    "text": "address",
+                    "type": "text",
+                    "mandatory": true
+                },
+                "partner_logo_1": {
+                    "id": 2,
+                    "url": "/media/posters/images/572403b51fd24b17_logo1.jpeg",
+                    "data": null,
+                    "name": "Logo partnera 1",
+                    "type": "image",
+                    "filename": null
+                }
+            },
             "fields": {
                 "title": {
                     "name": "Titul",
