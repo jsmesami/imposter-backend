@@ -15,12 +15,14 @@ A standalone repository of Django backend API for ClojureScript
 ### Prequisities
 
 * Python 3.5+
-* PostgreSQL 9 (only tested with 9.6)
+* PostgreSQL 9+ (only tested with 9.6)
 * Ghostscript
 * Poppler
 
 ### Installation
 
+    # Create and activate virtualenv
+    
     # Create and edit local settings to match your setup:
     cp src/settings/local_[deploy|devel]_example.py src/settings/local.py
     vim src/settings/local.py
